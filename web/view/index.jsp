@@ -1,0 +1,812 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>메뉴 추천 시스템! 오늘 뭐 eat지?</title>
+<link rel="stylesheet" href="view/main.css" type="text/css" />
+
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+
+<script src="view/js/alertify.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=LIBRARY"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=services,clusterer,drawing"></script>
+			
+			
+
+
+
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link
+	href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900"
+	rel="stylesheet">
+
+<link rel="stylesheet" href="view/css/alertify.core.css" />
+<link rel="stylesheet" href="view/css/alertify.default.css" />
+<link rel="stylesheet" href="view/css/alertify.bootstrap.css" />
+
+
+<title>메뉴 추천 시스템, 오늘 뭐 EAT지?</title>
+<!--
+Elegance Template
+https://templatemo.com/tm-528-elegance
+-->
+<!-- Additional CSS Files -->
+<link rel="stylesheet" type="text/css" href="view/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="view/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="view/css/fullpage.min.css">
+<link rel="stylesheet" type="text/css" href="view/css/owl.carousel.css">
+<link rel="stylesheet" href="view/css/animate.css">
+<link rel="stylesheet" href="view/css/templatemo-style.css">
+<link rel="stylesheet" href="view/css/responsive.css">
+
+
+<style>
+#menu_add_table>tbody{
+	align: center;
+
+}
+.auto_menu {
+	width:auto;
+	height: expression(this.scrollHeight > 99 ? "411px" : "auto");
+	max-height: 411px;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	
+
+}
+#dialogoverlay {
+	display: none;
+	opacity: .8;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: #FFF;
+	width: 100%;
+	z-index: 10;
+}
+
+#dialogbox {
+	display: none;
+	position: fixed;
+	background: #000;
+	border-radius: 7px;
+	width: 550px;
+	z-index: 10;
+}
+
+#dialogbox>div {
+	background: #FFF;
+	margin: 8px;
+}
+
+#dialogbox>div>#dialogboxhead {
+	background: #666;
+	font-size: 19px;
+	padding: 10px;
+	color: #CCC;
+}
+
+#dialogbox>div>#dialogboxbody {
+	background: #333;
+	padding: 20px;
+	color: #FFF;
+}
+
+#dialogbox>div>#dialogboxfoot {
+	background: #666;
+	padding: 10px;
+	text-align: right;
+}
+
+#wheel_back {
+	font-size: 70px;
+}
+
+@media ( max-width : 800px ) {
+	.the_wheel, .the_wheel thead, .the_wheel tbody, .the_wheel tr,
+		.the_wheel th, .the_wheel td {
+		display: block;
+	}
+	.the_wheel tr {
+		border-bottom: 1px solid #ddd;
+	}
+	.the_wheel th, .the_wheel td {
+		border-top: none;
+		border-bottom: none;
+	}
+}
+
+.back_ground {
+	background-image: url("view/images/img01.jpg");
+}
+
+#eat_font {
+	font-size: 50px;
+}
+
+
+.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+.map_wrap {position:relative;width:100%;height:500px;}
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item {color:#282828;};
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+#placesList .item .marker_1 {background-position: 0 -10px;}
+#placesList .item .marker_2 {background-position: 0 -56px;}
+#placesList .item .marker_3 {background-position: 0 -102px}
+#placesList .item .marker_4 {background-position: 0 -148px;}
+#placesList .item .marker_5 {background-position: 0 -194px;}
+#placesList .item .marker_6 {background-position: 0 -240px;}
+#placesList .item .marker_7 {background-position: 0 -286px;}
+#placesList .item .marker_8 {background-position: 0 -332px;}
+#placesList .item .marker_9 {background-position: 0 -378px;}
+#placesList .item .marker_10 {background-position: 0 -423px;}
+#placesList .item .marker_11 {background-position: 0 -470px;}
+#placesList .item .marker_12 {background-position: 0 -516px;}
+#placesList .item .marker_13 {background-position: 0 -562px;}
+#placesList .item .marker_14 {background-position: 0 -608px;}
+#placesList .item .marker_15 {background-position: 0 -654px;}
+#map {color:#282828;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#282828;}
+
+
+.overlaybox {position:relative;width:360px;height:350px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;}
+.overlaybox div, ul {overflow:hidden;margin:0;padding:0;}
+.overlaybox li {list-style: none;}
+.overlaybox .boxtitle {color:#fff;font-size:16px;font-weight:bold;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;}
+.overlaybox .first {position:relative;width:247px;height:136px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumb.png') no-repeat;margin-bottom:8px;}
+.first .text {color:#fff;font-weight:bold;}
+.first .triangle {position:absolute;width:48px;height:48px;top:0;left:0;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/triangle.png') no-repeat; padding:6px;font-size:18px;}
+.first .movietitle {position:absolute;width:100%;bottom:0;background:rgba(0,0,0,0.4);padding:7px 15px;font-size:14px;}
+.overlaybox ul {width:247px;}
+.overlaybox li {position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;}
+.overlaybox li span {display:inline-block;}
+.overlaybox li .number {font-size:16px;font-weight:bold;}
+.overlaybox li .title {font-size:13px;}
+.overlaybox ul .arrow {position:absolute;margin-top:8px;right:25px;width:5px;height:3px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/updown.png') no-repeat;} 
+.overlaybox li .up {background-position:0 -40px;}
+.overlaybox li .down {background-position:0 -60px;}
+.overlaybox li .count {position:absolute;margin-top:5px;right:15px;font-size:10px;}
+.overlaybox li:hover {color:#fff;background:#d24545;}
+.overlaybox li:hover .up {background-position:0 0px;}
+.overlaybox li:hover .down {background-position:0 -20px;}   
+
+</style>
+
+
+</head>
+
+<body>
+	<div id="video">
+		<div class="preloader">
+			<div class="preloader-bounce">
+				<span></span> <span></span> <span></span>
+			</div>
+		</div>
+
+		<header id="header">
+			<div class="container-fluid">
+				<div class="navbar">
+					<br> <a href="#slide01" id="logo"
+						title="Elegance by TemplateMo">
+						<span id="eat_font">오늘 </span><span>뭐 </span><span
+						id="eat_font">eat지?</span> </a>
+					<div class="navigation-row">
+						<nav id="navigation">
+							<button type="button" class="navbar-toggle">
+								<i class="fa fa-bars"></i>
+							</button>
+							<div class="nav-box navbar-collapse">
+								<ul class="navigation-menu nav navbar-nav navbars" id="nav">
+									<li data-menuanchor="slide01" class="active"><a
+										href="#slide01">Home</a></li>
+									<li data-menuanchor="slide02"><a href="#slide02">Setting</a></li>
+									<li data-menuanchor="slide03"><a href="#slide03">Roullets</a></li>
+									<li data-menuanchor="slide04"><a href="#slide04">Maps</a></li>
+
+									<c:choose>
+										<c:when test="${loginInfo == null }">
+											<li data-menuanchor="slide05"><a href="#slide05">Login</a></li>
+											<li data-menuanchor="slide06"><a href="#slide06">Join</a></li>
+										</c:when>
+										<c:otherwise>
+											<li data-menuanchor="slide05"><a href="logout.mc">Logout</a></li>
+											<li data-menuanchor="slide06"><a href="#slide06">Mypage</a></li>
+										</c:otherwise>
+									</c:choose>
+								</ul>
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<video autoplay muted loop id="myVideo">
+			<source src="" type="video/mp4">
+		</video>
+
+		<div id="fullpage" class="fullpage-default">
+			<div class="section animated-row" data-section="slide01">
+				<div class="section-inner">
+					<div class="welcome-box">
+						<span class="welcome-first animate" data-animate="fadeInUp">식사
+							시간만 되면 고민하셨죠?</span>
+						<h1 class="welcome-title animate" data-animate="fadeInUp">‘오늘
+							뭐 먹지?’</h1>
+						<p class="animate" data-animate="fadeInUp">이제, 저희가 결정해드립니다.</p>
+						<div class="next-section span" data-animate="fadeInUp">
+							<c:choose>
+								<c:when test="${loginInfo == null }">
+									<a href="#slide05">Login</a>
+									<a href="#slide06">Join</a>
+								</c:when>
+								<c:otherwise>
+									<a href="logout.mc">Logout</a>
+									<a href="#slide06">Mypage</a>
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="section animated-row" data-section="slide02">
+				<div class="section-inner">
+					<div class="about-section">
+						<div class="row justify-content-center">
+							<div class="col-lg-8 wide-col-laptop">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="about-contentbox">
+											<div class="animate" data-animate="fadeInUp">
+												<span>메뉴를</span>
+												<h1>선택하세요</h1>
+												<p></p>
+											</div>
+											<div class="facts-list owl-carousel">
+												<div class="item animate go_to_roullet"
+													 data-animate="fadeInUp">
+													<div class="counter-box">
+														<i class="fa fa-desktop counter-icon" aria-hidden="true"></i><span
+															class="count-number">룰렛 돌리기</span>
+													</div>
+												</div>
+
+												<div class="item animate p_add" data-animate="fadeInUp">
+													<div class="counter-box">
+														<i class="fa fa-desktop counter-icon" aria-hidden="true"></i><span
+															class="count-number">추가</span>
+													</div>
+												</div>
+												<div class="item animate p_delete" data-animate="fadeInUp">
+													<div class="counter-box">
+														<i class="fa fa-desktop counter-icon" aria-hidden="true"></i><span
+															class="count-number">삭제</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-6 auto_menu">
+										<div>
+											<div class="portfolio-item">
+												
+												<div class="thumb">
+													<img id="menu_select_default_img" src="images/img01.jpg"
+														alt="">
+												</div>
+												<div>
+													<table id="menu_add_table" style="margin:auto; text-align:center; font-size:20pt;">
+														<tbody >
+
+														</tbody>
+
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="section animated-row" data-section="slide03">
+				<div class="section-inner">
+					<div class="about-section">
+						<div class="row justify-content-center">
+							<div class="col-lg-8 wide-col-laptop">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="about-contentbox">
+											<div class="animate" data-animate="fadeInUp">
+
+												<div align="center">
+													<table cellpadding="20" cellspacing="0" border="0"
+														display:table-cell>
+														<tr>
+															<td>
+																<div class="power_controls">
+																	<br /> <br />
+																	<table class="power" cellpadding="10" cellspacing="0">
+																		<tr>
+																			<th align="center"></th>
+																		</tr>
+																		<tr>
+																			<td width="78" align="center" id="pw3"
+																				onClick="powerSelected(3);"></td>
+																		</tr>
+																		<tr>
+																			<td align="center" id="pw2"
+																				onClick="powerSelected(2);"></td>
+																		</tr>
+																		<tr>
+																			<td align="center" id="pw1"
+																				onClick="powerSelected(1);"></td>
+																		</tr>
+																	</table>
+																	<br /> <img id="spin_button"
+																		src="view/images/button1.jpg" alt="Spin" /> <br /> <br />
+																	&nbsp;&nbsp;<a href="#" text-align="center"
+																		id="resetWheel"returnfalse;">&nbsp;
+																		Reset
+																	</a>
+																</div>
+															</td>
+															<td id="wheel_back" width="438" height="582"
+																class="the_wheel" align="center" valign="center">▼
+																<canvas id="canvas" width="434" height="434">
+																</canvas>
+															</td>
+															<td width="438" height="582" class="the_wheel"
+																valign="center" align="center">
+																<canvas align="right" id="myCanvas" width="434"
+																	height="434">
+																</canvas>
+																<h3 id="food_name" style="text-align: center;"></h3>
+																<h1 id="start_check" style="text-align: center;">&nbsp;</h1>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="section animated-row" data-section="slide04">
+				<div class="section-inner">
+					<div class="row justify-content-center">
+						<div class="col-md-7 wide-col-laptop">
+							
+							<div class="animate" data-animate="fadeInUp">
+								<div class="map_wrap">
+									<div id="map" style="width:100%;height:100%;"></div>
+									<div id="menu_wrap" class="bg_white">
+										<ul id="placesList"></ul>
+										<div id="pagination"></div>
+									</div>
+								</div>
+								
+								<div class="input-field">
+									
+									<input type="text" class="form-control" name="map_address"
+										id="map_address" required placeholder="주소를 입력해주세요">
+									
+								</div>
+								
+								<button class="btn" id="btn_map_search" type="submit">검색하기</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<!-- 로그인 페이지 -->
+			<div class="section animated-row" data-section="slide05">
+				<c:choose>
+					<c:when test="${loginInfo == null }">
+						<jsp:include page="login.jsp"></jsp:include>
+					</c:when>
+					<c:otherwise>
+						<jsp:include page="loginok.jsp"></jsp:include>
+					</c:otherwise>
+				</c:choose>
+			</div>
+			
+			<!-- 회원가입 페이지  -->
+			<div class="section animated-row" data-section="slide06">
+				<c:choose>
+					<c:when test="${loginInfo== null }">
+						<jsp:include page="join.jsp"></jsp:include>
+					</c:when>
+					<c:otherwise>
+						<jsp:include page="user_update.jsp"></jsp:include>
+					</c:otherwise>
+				</c:choose>
+			</div>
+
+			<!-- 비밀번호 찾기 페이지 -->
+			<c:choose>
+				<c:when test="${loginInfo== null }">
+					<div class="section animated-row" data-section="slide07">
+						<jsp:include page="find_pwd.jsp"></jsp:include>
+					</div>
+				</c:when>
+			</c:choose>
+			
+			
+
+		</div>
+			<script>
+				var user_id = '${loginInfo.id}'; //따옴표 씌우기
+				function delete1() {
+					$('html, body').animate({
+						scrollTop : target.offset().top - top_space
+					}, 1500, 'easeInOutExpo');
+				};
+				
+				
+				
+				var numSegments = 0;
+				var FoodList = new Array();
+				var flag = 0;
+				var theWheel;
+			
+				function makeRoullet() {
+					//Create new wheel object specifying the parameters at creation time.
+					theWheel = new Winwheel({
+						'numSegments' : numSegments, // Specify number of segments.
+						'outerRadius' : 212, // Set outer radius so wheel fits inside the background.
+						'textFontSize' : 28, // Set font size as desired.
+						'segments' : FoodList// Define segments including colour and text.
+						,
+						'animation' : // Specify the animation to use.
+						{
+							'type' : 'spinToStop',
+							'duration' : 15,
+							'spins' : 8,
+							'callbackFinished' : alertPrize,
+							'callbackSound' : playSound, // Function to call when the tick sound is to be triggered.
+							'soundTrigger' : 'pin' // Specify pins are to trigger the sound, the other option is 'segment'.
+						},
+						'pins' : {
+							'number' : 16
+						// Number of pins. They space evenly around the wheel.
+						}
+					});
+
+					location.href = "#slide03";
+				}
+
+				$('.go_to_roullet').click(function() {
+					if (user_id != null) {
+						var foodJson;
+						$.ajax({
+							url : "add_pre_roullet.mc",
+							type : "POST",
+							data : {
+								"id" : user_id
+							},
+							success : function(data) {
+
+								var index = 0;
+								foodJson = JSON.parse(data);
+								$.each(foodJson, function() {
+
+									if (numSegments % 2 == 0) {
+										numSegments++;
+
+										FoodList.push({
+											'fillStyle' : '#EAEAEA',
+											'text' : this.name
+										});
+
+									} else {
+										numSegments++;
+										FoodList.push({
+											'fillStyle' : '#F6F6F6',
+											'text' : this.name
+										});
+
+									}
+									makeRoullet();
+									draw('img01');
+
+								})
+
+							}
+						});
+
+					} else {
+						makeRoullet();
+						draw('img01');
+					}
+
+				});
+				
+				var cnt=0;
+				$(document).ready(function(){
+			          $(document).on("click","#placesList > .item",function(event){
+			           var idx=$(this).index();
+			           var places_place_name= document.getElementById("places_place_name"+idx).innerText;
+			           var places_road_address=document.getElementById("places_road_address"+idx).textContent;
+			           var places_address_name=document.getElementById("places_address_name"+idx).textContent;
+			           var places_phone=document.getElementById("places_phone"+idx).textContent;
+			           // 주소-좌표 변환 객체를 생성합니다
+			           var geocoder = new kakao.maps.services.Geocoder();
+			           
+			           // 주소로 좌표를 검색합니다
+			           geocoder.addressSearch(places_address_name, function(result, status) {
+
+			               // 정상적으로 검색이 완료됐으면 
+			                if (status === kakao.maps.services.Status.OK) {
+			                   var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+			                   var content = '<div class="overlaybox">' +
+			                   '    <div class="boxtitle">금주 영화순위</div>' +
+			                   '    <div class="first">' +
+			                   '        <div class="triangle text">1</div>' +
+			                   '        <div class="movietitle text">드래곤 길들이기2</div>' +
+			                   '    </div>' +
+			                   '    <ul>' +
+			                   '        <li class="up">' +
+			                   '            <span class="number">2</span>' +
+			                   '            <span class="title">명량</span>' +
+			                   '            <span class="arrow up"></span>' +
+			                   '            <span class="count">2</span>' +
+			                   '        </li>' +
+			                   '        <li>' +
+			                   '            <span class="number">3</span>' +
+			                   '            <span class="title">해적(바다로 간 산적)</span>' +
+			                   '            <span class="arrow up"></span>' +
+			                   '            <span class="count">6</span>' +
+			                   '        </li>' +
+			                   '        <li>' +
+			                   '            <span class="number">4</span>' +
+			                   '            <span class="title">해무</span>' +
+			                   '            <span class="arrow up"></span>' +
+			                   '            <span class="count">3</span>' +
+			                   '        </li>' +
+			                   '        <li>' +
+			                   '            <span class="number">5</span>' +
+			                   '            <span class="title">안녕, 헤이즐</span>' +
+			                   '            <span class="arrow down"></span>' +
+			                   '            <span class="count">1</span>' +
+			                   '        </li>' +
+			                   '    </ul>' +
+			                   '</div>';
+
+								
+								//커스텀 오버레이를 생성합니다
+								var customOverlay = new kakao.maps.CustomOverlay({
+								position: coords,
+								content: content,
+								xAnchor: 0.3,
+								yAnchor: 0.91
+								});
+
+								//커스텀 오버레이를 지도에 표시합니다
+								if(cnt===0){
+									customOverlay.setMap(map);
+									cnt=1;
+								}else if(cnt===1){
+									customOverlay.setMap(null);
+									cnt=0;
+								}
+			               } 
+			           });  
+			          });
+			      });
+
+				
+				
+
+				$("#spin_button").click(function() {
+					startSpin();
+				});
+
+				$("#resetWheel").click(function() {
+					draw('img01');
+					resetWheel();
+				});
+
+				$("#start_check").click(function() {
+
+					location.href = "#slide04";
+				});
+
+				// -----------------------------------------------------------------
+				// This function is called when the segment under the prize pointer changes
+				// we can play a small tick sound here like you would expect on real prizewheels.
+				// -----------------------------------------------------------------
+				let audio = new Audio('tick.mp3'); // Create audio object and load tick.mp3 file.
+
+				function playSound() {
+					// Stop and rewind the sound if it already happens to be playing.
+					audio.pause();
+					audio.currentTime = 0;
+
+					// Play the sound.
+					audio.play();
+				}
+
+				// -------------------------------------------------------
+				// Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
+				// note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
+				// -------------------------------------------------------
+				function alertPrize(indicatedSegment) {
+					alertify.alert("당첨! " + indicatedSegment.text);
+					roullet_result = indicatedSegment;
+
+					draw(indicatedSegment.text);
+
+					document.getElementById('food_name').innerHTML = indicatedSegment.text;
+					document.getElementById('start_check').innerHTML = '검색하기';
+				}
+
+				// =======================================================================================================================
+				// Code below for the power controls etc which is entirely optional. You can spin the wheel simply by
+				// calling theWheel.startAnimation();
+				// =======================================================================================================================
+				let wheelPower = 0;
+				let wheelSpinning = false;
+
+				// -------------------------------------------------------
+				// Function to handle the onClick on the power buttons.
+				// -------------------------------------------------------
+				function powerSelected(powerLevel) {
+					// Ensure that power can't be changed while wheel is spinning.
+					if (wheelSpinning == false) {
+						// Reset all to grey incase this is not the first time the user has selected the power.
+						document.getElementById('pw1').className = "";
+						document.getElementById('pw2').className = "";
+						document.getElementById('pw3').className = "";
+
+						// Now light up all cells below-and-including the one selected by changing the class.
+						if (powerLevel >= 1) {
+							document.getElementById('pw1').className = "pw1";
+						}
+
+						if (powerLevel >= 2) {
+							document.getElementById('pw2').className = "pw2";
+						}
+
+						if (powerLevel >= 3) {
+							document.getElementById('pw3').className = "pw3";
+						}
+
+						// Set wheelPower var used when spin button is clicked.
+						wheelPower = powerLevel;
+
+						// Light up the spin button by changing it's source image and adding a clickable class to it.
+						document.getElementById('spin_button').src = "view/images/button1.jpg";
+						document.getElementById('spin_button').className = "clickable";
+					}
+				}
+
+				// -------------------------------------------------------
+				// Click handler for spin button.
+				// -------------------------------------------------------
+				function startSpin() {
+					// Ensure that spinning can't be clicked again while already running.
+					if (wheelSpinning == false) {
+						// Based on the power level selected adjust the number of spins for the wheel, the more times is has
+						// to rotate with the duration of the animation the quicker the wheel spins.
+						if (wheelPower == 1) {
+							theWheel.animation.spins = 3;
+						} else if (wheelPower == 2) {
+							theWheel.animation.spins = 8;
+						} else if (wheelPower == 3) {
+							theWheel.animation.spins = 15;
+						}
+
+						// Disable the spin button so can't click again while wheel is spinning.
+						document.getElementById('spin_button').src = "view/images/button1.jpg";
+						document.getElementById('spin_button').className = "";
+
+						// Begin the spin animation by calling startAnimation on the wheel object.
+						theWheel.startAnimation();
+
+						// Set to true so that power can't be changed and spin button re-enabled during
+						// the current animation. The user will have to reset before spinning again.
+						wheelSpinning = true;
+					}
+				}
+
+				// -------------------------------------------------------
+				// Function for reset button.
+				// -------------------------------------------------------
+				function resetWheel() {
+					theWheel.stopAnimation(false); // Stop the animation, false as param so does not call callback function.
+					theWheel.rotationAngle = 0; // Re-set the wheel angle to 0 degrees.
+					theWheel.draw(); // Call draw to render changes to the wheel.
+
+					document.getElementById('pw1').className = ""; // Remove all colours from the power level indicators.
+					document.getElementById('pw2').className = "";
+					document.getElementById('pw3').className = "";
+
+					wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
+				}
+
+				// Create new wheel object specifying the parameters at creation time.
+				function draw(FoodName) {
+					//이미지 객체 생성
+					var imgClo = new Image();
+					//페이지 로드후 이미지가 로드 되었을 때 이미지 출력
+					imgClo.addEventListener('load', function() {
+						//로드된 이미지를 캔버스에 출력
+						var ctx = document.getElementById('myCanvas')
+								.getContext("2d");
+						//canvas.drawImage() 함수를 사용하여 이미지 출력
+						//drawImage ( image sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+						ctx.drawImage(imgClo, 20, 30, 400, 400);
+					}, false);
+					//이미지 경로 설정
+					imgClo.src = "view/images/food/" + FoodName + ".PNG";
+				}
+				
+				
+
+
+
+				
+
+				
+			</script>
+
+
+			<script type="text/javascript" src="view/js/menu.js"></script>
+			<script src="view/js/kakaoMap_request.js"></script>
+			<script src="view/js/kakaoMap_overlay.js"></script>
+			<script src="view/js/kakaoMap_geolocation.js"></script>
+			<script src="view/js/jquery.js"></script>
+			<script src="view/js/bootstrap.min.js"></script>
+			<script src="view/js/fullpage.min.js"></script>
+			<script src="view/js/scrolloverflow.js"></script>
+			<script src="view/js/owl.carousel.min.js"></script>
+			<script src="view/js/jquery.inview.min.js"></script>
+			<script src="view/js/form.js"></script>
+			<script src="view/js/custom.js"></script>
+			<script src="view/js/Winwheel.js"></script>
+</body>
+</html>
