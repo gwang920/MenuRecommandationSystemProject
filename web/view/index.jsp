@@ -179,27 +179,20 @@ https://templatemo.com/tm-528-elegance
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#282828;}
 
-
-.overlaybox {position:relative;width:360px;height:350px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;}
-.overlaybox div, ul {overflow:hidden;margin:0;padding:0;}
-.overlaybox li {list-style: none;}
-.overlaybox .boxtitle {color:#fff;font-size:16px;font-weight:bold;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;}
-.overlaybox .first {position:relative;width:247px;height:136px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumb.png') no-repeat;margin-bottom:8px;}
-.first .text {color:#fff;font-weight:bold;}
-.first .triangle {position:absolute;width:48px;height:48px;top:0;left:0;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/triangle.png') no-repeat; padding:6px;font-size:18px;}
-.first .movietitle {position:absolute;width:100%;bottom:0;background:rgba(0,0,0,0.4);padding:7px 15px;font-size:14px;}
-.overlaybox ul {width:247px;}
-.overlaybox li {position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;}
-.overlaybox li span {display:inline-block;}
-.overlaybox li .number {font-size:16px;font-weight:bold;}
-.overlaybox li .title {font-size:13px;}
-.overlaybox ul .arrow {position:absolute;margin-top:8px;right:25px;width:5px;height:3px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/updown.png') no-repeat;} 
-.overlaybox li .up {background-position:0 -40px;}
-.overlaybox li .down {background-position:0 -60px;}
-.overlaybox li .count {position:absolute;margin-top:5px;right:15px;font-size:10px;}
-.overlaybox li:hover {color:#fff;background:#d24545;}
-.overlaybox li:hover .up {background-position:0 0px;}
-.overlaybox li:hover .down {background-position:0 -20px;}   
+    .wrap {position: absolute;left: 0;bottom: 40px;width: 600px;height:400px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+    .wrap * {padding: 0;margin: 0;}
+    .wrap .info {width: 600px;height: 400px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: linear-gradient( to top, #e2f6fd,#fafdfe ); opacity:0.8;}
+    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+    .info .title {padding: 5px 0 0 10px;height: 70px;background: #eee;border-bottom: 1px solid #ddd;font-size: 35px;font-weight: bold;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info .body {position: relative; }
+    .info .desc {position: relative; text-align:center; margin: 13px 5px 0 90px;height: 100px;}
+    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;  font-size: 20px;}
+    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px; font-size: 20px;}
+    .info .img {position: absolute;top: 6px;left: 5px;width: 140px;height: 140px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+    .info:after {content: '';position: absolute;margin-left: -12px;left: 25%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+    .info .link {color: #5085BB; font-size: 20px;}
 
 </style>
 
@@ -565,7 +558,9 @@ https://templatemo.com/tm-528-elegance
 
 				});
 				
-				var cnt=0;
+				
+				// overlay 설정
+				var overlay;
 				$(document).ready(function(){
 			          $(document).on("click","#placesList > .item",function(event){
 			           var idx=$(this).index();
@@ -581,64 +576,65 @@ https://templatemo.com/tm-528-elegance
 
 			               // 정상적으로 검색이 완료됐으면 
 			                if (status === kakao.maps.services.Status.OK) {
+			                
+			                   var foodName=document.getElementById('food_name').innerHTML;
 			                   var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-			                   var content = '<div class="overlaybox">' +
-			                   '    <div class="boxtitle">금주 영화순위</div>' +
-			                   '    <div class="first">' +
-			                   '        <div class="triangle text">1</div>' +
-			                   '        <div class="movietitle text">드래곤 길들이기2</div>' +
-			                   '    </div>' +
-			                   '    <ul>' +
-			                   '        <li class="up">' +
-			                   '            <span class="number">2</span>' +
-			                   '            <span class="title">명량</span>' +
-			                   '            <span class="arrow up"></span>' +
-			                   '            <span class="count">2</span>' +
-			                   '        </li>' +
-			                   '        <li>' +
-			                   '            <span class="number">3</span>' +
-			                   '            <span class="title">해적(바다로 간 산적)</span>' +
-			                   '            <span class="arrow up"></span>' +
-			                   '            <span class="count">6</span>' +
-			                   '        </li>' +
-			                   '        <li>' +
-			                   '            <span class="number">4</span>' +
-			                   '            <span class="title">해무</span>' +
-			                   '            <span class="arrow up"></span>' +
-			                   '            <span class="count">3</span>' +
-			                   '        </li>' +
-			                   '        <li>' +
-			                   '            <span class="number">5</span>' +
-			                   '            <span class="title">안녕, 헤이즐</span>' +
-			                   '            <span class="arrow down"></span>' +
-			                   '            <span class="count">1</span>' +
-			                   '        </li>' +
-			                   '    </ul>' +
+			                   var content = '<div class="wrap">' + 
+			                   '    <div class="info">' + 
+			                   '        <div class="title">' + 
+			                               places_place_name + 
+			                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
+			                   '        </div>' + 
+			                   '        <div class="body">' + 
+			                   '            <div class="img">' +
+			                   '                <img src="view/images/food/' + foodName + '.PNG"  style="max-width: 100%; height: auto;">' +
+			                   '           </div>' + 
+			                   '            <div class="desc">' + 
+			                   '                <div class="ellipsis">'+places_road_address+'</div>' + 
+			                   '                <div class="jibun ellipsis">'+places_address_name+'</div>' + 
+			                   '                <br>' + 
+			                   '                <div><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'" target="_blank" class="link">네이버 검색!</a></div>' + 
+			                   '            </div>' + 
+			                   '        </div>' + 
+			                   '    aaaaaaaaaaaaaaaaa</div>' +    
 			                   '</div>';
+			                   
+					if(overlay!=null){
+					   overlay.setMap(null);   
+					}
 
-								
-								//커스텀 오버레이를 생성합니다
-								var customOverlay = new kakao.maps.CustomOverlay({
-								position: coords,
-								content: content,
-								xAnchor: 0.3,
-								yAnchor: 0.91
-								});
-
-								//커스텀 오버레이를 지도에 표시합니다
-								if(cnt===0){
-									customOverlay.setMap(map);
-									cnt=1;
-								}else if(cnt===1){
-									customOverlay.setMap(null);
-									cnt=0;
-								}
+			       // 마커 위에 커스텀오버레이를 표시합니다
+			       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+			       overlay = new kakao.maps.CustomOverlay({
+			           content: content,
+			           map: map,
+			           position: coords  
+			       });
+			       
+			       
+			       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
+			       
+			       map.setLevel(4);
+			       map.setCenter(coords);
+			       
+			       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+			       overlay.setMap(map);
+					$(document).on("click","#closeOverlay",function(event){
+						overlay.setMap(null);  
+					});
+					
 			               } 
 			           });  
 			          });
 			      });
 
-				
+				// 키워드로 장소를 검색합니다
+				$("#btn_map_search").click(function(){
+					if(overlay!=null){
+						   overlay.setMap(null);   
+						}
+					searchPlaces();
+				});
 				
 
 				$("#spin_button").click(function() {
