@@ -22,20 +22,4 @@ public class MainController {
 		return mv;
 		
 	}
-//	@RequestMapping("/login.mc")
-//	public ModelAndView login() {
-//		ModelAndView mv = new ModelAndView();
-//		mv.addObject("center", "login");
-////		mv.addObject("navi", Navi.login);
-//		mv.setViewName("main");
-//		return mv;
-//	}
-//	@RequestMapping("/join.mc")
-//	public ModelAndView register() {
-//		ModelAndView mv = new ModelAndView();
-//		mv.addObject("center", "join");
-////		mv.addObject("navi", Navi.register);
-//		mv.setViewName("main");
-//		return mv;
-//	}
 }

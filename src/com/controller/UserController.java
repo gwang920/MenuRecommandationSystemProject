@@ -147,11 +147,7 @@ public class UserController {
 		response.setCharacterEncoding("UTF-8");
 
 		if (users.size() != 0 && name != null && !name.equals("") && users.get(0).getName().equals(name)) {
-//			System.out.println(users);
-			/*
-			 * session.setAttribute("findInfo", user); session.setMaxInactiveInterval(1000);
-			 * result = user.getPwd(); System.out.println(result);
-			 */
+
 			result = users.get(0).getHint();
 			response.setContentType("text/json; charset=UTF-8");
 			
@@ -166,10 +162,8 @@ public class UserController {
 			try {
 				out = response.getWriter();
 				out.print(jo);
-//				out.print(resu);
 				out.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -181,7 +175,6 @@ public class UserController {
 				out.print(result);
 				out.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

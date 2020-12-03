@@ -48,4 +48,12 @@ public class foodBiz implements ObjectBiz<String, Food> {
 		return dao.selectAll();
 	}
 
+	@Override
+	public ArrayList<Food> select(String k, String k1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 }

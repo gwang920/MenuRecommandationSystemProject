@@ -50,4 +50,11 @@ public class foodDao implements ObjectDao<String, Food> {
 		return fm.selectall();
 	}
 
+	@Override
+	public ArrayList<Food> select(String k, String k1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

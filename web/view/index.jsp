@@ -21,9 +21,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=LIBRARY"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=services,clusterer,drawing"></script>
 			
-			
-
-
 
 <meta charset="utf-8">
 <meta name="viewport"
@@ -139,7 +136,6 @@ https://templatemo.com/tm-528-elegance
 	font-size: 50px;
 }
 
-
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative;width:100%;height:500px;}
@@ -175,9 +171,11 @@ https://templatemo.com/tm-528-elegance
 #placesList .item .marker_14 {background-position: 0 -608px;}
 #placesList .item .marker_15 {background-position: 0 -654px;}
 #map {color:#282828;}
+
 #pagination {margin:10px auto;text-align: center;}
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#282828;}
+
 
     .wrap {position: absolute;left: 0;bottom: 40px;width: 600px;height:400px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -189,16 +187,15 @@ https://templatemo.com/tm-528-elegance
     .info .body {position: relative; }
     .info .desc {position: relative; text-align:center; margin: 13px 5px 0 90px;height: 100px;}
     .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;  font-size: 20px;}
-    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px; font-size: 20px;}
+    .desc .jibun {color: #888;margin-top: -2px; font-size: 20px;}
+    .desc .score {color: #888; margin-top:-2px; font-size:25px;}
+    #go_to_review {border-bottom: 1px solid #bcbcbc; width:280px; margin-left:115px;}
     .info .img {position: absolute;top: 6px;left: 5px;width: 140px;height: 140px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 25%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB; font-size: 20px;}
-
 </style>
 
-
 </head>
-
 <body>
 	<div id="video">
 		<div class="preloader">
@@ -468,7 +465,6 @@ https://templatemo.com/tm-528-elegance
 				</c:when>
 			</c:choose>
 			
-			
 
 		</div>
 			<script>
@@ -557,77 +553,103 @@ https://templatemo.com/tm-528-elegance
 					}
 
 				});
-				
+				function get_score(place_name,place_address){
+					alert("get_score_start");
+					$.ajax({
+						url : "getScore.mc",
+						type : "POST",
+						data : {
+							"place_name" : place_name, "place_address":place_address
+						},
+						success : function(data) {
+							alert(data);
+						}
+					});
+				};
 				
 				// overlay 설정
-				var overlay;
+				var overlay=null;
 				$(document).ready(function(){
-			          $(document).on("click","#placesList > .item",function(event){
-			           var idx=$(this).index();
-			           var places_place_name= document.getElementById("places_place_name"+idx).innerText;
-			           var places_road_address=document.getElementById("places_road_address"+idx).textContent;
-			           var places_address_name=document.getElementById("places_address_name"+idx).textContent;
-			           var places_phone=document.getElementById("places_phone"+idx).textContent;
-			           // 주소-좌표 변환 객체를 생성합니다
-			           var geocoder = new kakao.maps.services.Geocoder();
-			           
-			           // 주소로 좌표를 검색합니다
-			           geocoder.addressSearch(places_address_name, function(result, status) {
+				      $(document).on("click","#placesList > .item",function(event){
+				    	  var idx=$(this).index();
+				    	  var places_place_name= document.getElementById("places_place_name"+idx).innerText;
+				    	  var places_road_address=document.getElementById("places_road_address"+idx).textContent;
+				    	  var places_address_name=document.getElementById("places_address_name"+idx).textContent;
+				    	  var places_phone=document.getElementById("places_phone"+idx).textContent;
+				    	  // 주소-좌표 변환 객체를 생성합니다
+				    	  
+				    	  get_score(places_place_name,places_road_address);
+				    	  
+				    	  var geocoder = new kakao.maps.services.Geocoder();
+						  // 주소로 좌표를 검색합니다
+						  geocoder.addressSearch(places_address_name, function(result, status) {
+							  // 정상적으로 검색이 완료됐으면 
+							  if (status === kakao.maps.services.Status.OK) {
+							        var foodName=document.getElementById('food_name').innerHTML;
+							        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+							        var content = '<div class="wrap">' + 
+							                   '    <div class="info">' + 
+							                   '        <div class="title">' + 
+							                               places_place_name + 
+							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
+							                   '        </div>' + 
+							                   '        <div class="body">' + 
+							                   '            <div class="img">' +
+							                   '                <img src="view/images/food/' + foodName + '.PNG"  style="max-width: 100%; height: auto;">' +
+							                   '           </div>' + 
+							                   '            <div class="desc">' + 
+							                   '                <div class="ellipsis">'+places_road_address+'</div>' + 
+							                   '                <div class="jibun ellipsis">'+places_address_name+'</div>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '  				<div class="score">평점</div>' +
+							                   '  				<div class="score">4.5/5.0</div>' +
+							                   '  				<div class="score" id="go_to_review">리뷰를 확인해 보세요!</div>' +
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <div><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank" class="link">네이버 검색!</a></div>' + 	
+							                   '        	</div>' + 
+							                   '        </div>' + 
+							                   '    </div>' +  
+							                   '</div>';
+									
+							                   
+									if(overlay!=null){
+									   overlay.setMap(null);   
+									}
 
-			               // 정상적으로 검색이 완료됐으면 
-			                if (status === kakao.maps.services.Status.OK) {
-			                
-			                   var foodName=document.getElementById('food_name').innerHTML;
-			                   var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-			                   var content = '<div class="wrap">' + 
-			                   '    <div class="info">' + 
-			                   '        <div class="title">' + 
-			                               places_place_name + 
-			                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
-			                   '        </div>' + 
-			                   '        <div class="body">' + 
-			                   '            <div class="img">' +
-			                   '                <img src="view/images/food/' + foodName + '.PNG"  style="max-width: 100%; height: auto;">' +
-			                   '           </div>' + 
-			                   '            <div class="desc">' + 
-			                   '                <div class="ellipsis">'+places_road_address+'</div>' + 
-			                   '                <div class="jibun ellipsis">'+places_address_name+'</div>' + 
-			                   '                <br>' + 
-			                   '                <div><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'" target="_blank" class="link">네이버 검색!</a></div>' + 
-			                   '            </div>' + 
-			                   '        </div>' + 
-			                   '    aaaaaaaaaaaaaaaaa</div>' +    
-			                   '</div>';
-			                   
-					if(overlay!=null){
-					   overlay.setMap(null);   
-					}
-
-			       // 마커 위에 커스텀오버레이를 표시합니다
-			       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-			       overlay = new kakao.maps.CustomOverlay({
-			           content: content,
-			           map: map,
-			           position: coords  
-			       });
-			       
-			       
-			       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
-			       
-			       map.setLevel(4);
-			       map.setCenter(coords);
-			       
-			       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-			       overlay.setMap(map);
-					$(document).on("click","#closeOverlay",function(event){
-						overlay.setMap(null);  
+							       // 마커 위에 커스텀오버레이를 표시합니다
+							       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+							       overlay = new kakao.maps.CustomOverlay({
+							           content: content,
+							           map: map,
+							           position: coords  
+							       });
+							       
+							       
+							       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
+							       
+							       map.setLevel(4);
+							       map.setCenter(coords);
+							       
+							       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+							       overlay.setMap(map);
+									$(document).on("click","#closeOverlay",function(event){
+										overlay.setMap(null);  
+									});
+									
+							               } 
+							           });  
+							          });
+							      });
+				
+				$(document).ready(function(){
+					$(document).on("click","#go_to_review",function(event){
 					});
-					
-			               } 
-			           });  
-			          });
-			      });
-
+				});
+				
+				
+				
 				// 키워드로 장소를 검색합니다
 				$("#btn_map_search").click(function(){
 					if(overlay!=null){
@@ -780,14 +802,6 @@ https://templatemo.com/tm-528-elegance
 					//이미지 경로 설정
 					imgClo.src = "view/images/food/" + FoodName + ".PNG";
 				}
-				
-				
-
-
-
-				
-
-				
 			</script>
 
 

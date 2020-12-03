@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.scoreMapper">
+
+	<select id="select" parameterType="String" 
+	resultType="Score">
+		SELECT * FROM SCORE WHERE PLACE_NAME=#{place_name} AND PLACE_ADDRESS=#{place_address}
+	</select>
+	
+	<select id="selectAll" 
+	resultType="Score">
+		SELECT * FROM SCORE ORDER BY 1
+	</select>
+	<insert id="insert" parameterType="Score">
+		INSERT INTO SCORE VALUES (#{place_name},#{place_address},#{score})
+	</insert>
+</mapper>
+
+
+
+
+
+

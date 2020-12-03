@@ -47,4 +47,10 @@ public class userBiz implements ObjectBiz<String, User> {
 		return dao.selectAll();
 	}
 
+	@Override
+	public ArrayList<User> select(String k, String k1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -7,5 +7,6 @@ public interface ObjectBiz<K,V> {
 	public void delete(K k);
 	public void update(V v);
 	public ArrayList<V> select(K k);
+	public ArrayList<V> select(K k,K k1);
 	public ArrayList<V> selectAll();
 }

@@ -33,7 +33,6 @@ function makeRowPre(food_id, food_name, index,type) {
 }
 
 function delRowPre(food_id, food_name, index,type) {
-	alertify.alert("Ignore테이블을 가져옵니다.");
 	var rowSentence = "<tr id=" + index + type+"><td>" +  food_name + "</td></tr>";
 	$('#menu_add_table > tbody').append(rowSentence);
 	var tagOrder = "#" + index+type;
