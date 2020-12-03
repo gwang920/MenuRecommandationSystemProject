@@ -17,12 +17,6 @@ var ps = new kakao.maps.services.Places();
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 
-// 키워드로 장소를 검색합니다
-$("#btn_map_search").click(function(){
-	searchPlaces();
-});
-
-
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
 	var food=roullet_result.text;
