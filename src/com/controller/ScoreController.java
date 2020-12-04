@@ -27,6 +27,7 @@ public class ScoreController {
 		try {
 			biz.insert(score);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("scoreInsertImpl error");
 		}
 	}
@@ -38,6 +39,7 @@ public class ScoreController {
 		try {
 			biz.update(score);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("scoreUpdateImpl error");
 		}
 	}
@@ -51,6 +53,7 @@ public class ScoreController {
 			sc=biz.select(place_name,place_address);
 			System.out.println(sc);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("error");
 		}
 		return sc;

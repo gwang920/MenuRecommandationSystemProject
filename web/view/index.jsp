@@ -567,6 +567,8 @@ https://templatemo.com/tm-528-elegance
 
 				});
 				
+				
+				var score_count;
 				function get_score(place_name,place_address){
 					var score_info;
 					$.ajax({
@@ -577,8 +579,8 @@ https://templatemo.com/tm-528-elegance
 						},
 						async : false,
 						success : function(data) {
-							var cnt=data[0].count;
-							score_info=(data[0].score/cnt).toFixed(1);
+							score_count=data[0].count;
+							score_info=(data[0].score/score_count).toFixed(1);
 						}
 					});
 					if(score_info===undefined){
@@ -689,14 +691,17 @@ https://templatemo.com/tm-528-elegance
 							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
 							                   '        </div>' + 
 							                   '        <div class="body">' + 
-							                   '            <div class="desc">' + 
-							                   '                <div class="ellipsis"></div>' + 
-							                   '                <div class="jibun ellipsis">리뷰</div>' + 
+							                   '				<br>'+	
+							                   '				<div style="font-size: 19px;">평점을 남겨보세요!</div>'+
+							                   '  				<div><p class="star_rating"><a href="#" >★</a><a href="#" >★</a><a href="#" >★</a><a href="#">★</a><a href="#">★</a></p></div>' +
+							                   '  				<div id="star_click" style="font-size: 19px;"></div>' +
+							                   '            	<div>' +
+							                   ' 				<br>' +		
+							                   '                <div class="ellipsis" style="text-align:left; font-size: 20px;">리뷰</div>' + 
+							                   '                <div class="jibun ellipsis" style="text-align:left; font-size: 15px;">1. 여기  맛있읍니다 ^^ 곱창 드세요 ㅋㅋ </div>' + 
 							                   '                <br>' + 
 							                   '                <br>' + 
 							                   '  				<div></div>' +
-							                   '  				<div><p class="star_rating"><a href="#" >★</a><a href="#" >★</a><a href="#" >★</a><a href="#">★</a><a href="#">★</a></p></div>' +
-							                   '  				<div id="star_click"></div>' +
 							                   '                <br>' + 
 							                   '                <br>' +  	
 							                   '        	</div>' + 
@@ -742,7 +747,6 @@ https://templatemo.com/tm-528-elegance
 					     $(this).parent().children("a").removeClass("on");
 					     $(this).addClass("on").prevAll("a").addClass("on");
 					     star_idx=$(this).index();
-					     alert(star_idx);
 					     document.getElementById("star_click").innerHTML="평점하기";
 					     return false;
 					});
@@ -755,15 +759,28 @@ https://templatemo.com/tm-528-elegance
 								,place_address: places_road_address
 								,score: star_idx+1
 								,count:1}
-						$.ajax({
-							url : "scoreUpdateImpl.mc",
-							type : "POST",
-							data : form,
-							async : false,
-							success : function(data) {
-								alertify.alert("평점올리기 완료");
-							}
-						});
+						
+						if(score_count){
+							$.ajax({
+								url : "scoreUpdateImpl.mc",
+								type : "POST",
+								data : form,
+								async : false,
+								success : function(data) {
+									alertify.alert("평점올리기 완료1");
+								}
+							});
+						}else{
+							$.ajax({
+								url : "scoreInsertImpl.mc",
+								type : "POST",
+								data : form,
+								async : false,
+								success : function(data) {
+									alertify.alert("평점올리기 완료2");
+								}
+							});
+						}
 					});
 				});
 				
