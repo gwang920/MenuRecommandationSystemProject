@@ -1,10 +1,18 @@
 ## 2020-12-04
-수정사항
+### 수정사항
 
-score 테이블 place_name,place_address 유니크 키 설정  
+![image](https://user-images.githubusercontent.com/49560745/101140234-0aba4900-3656-11eb-83b9-2d65f5004731.png)
+
+
+
+1) score 테이블 place_name,place_address 유니크 키 설정  
 => 매번 모든 별점을 가져와 계산하는 것은 큰 부하를 발생한다고 판단되어  
 테이블에는 매번 갱신된(평균별점값) 값을 넣어주는 것으로 변경
-
+  
+2) 평점 계산해서 넣어주기(score/cnt)  
+=> score 테이블 insert,select,selectall,update 기능 구현 완료  
+  
+3) 게시판 테이블 => 페이지 이동없이 ajax로 요청! (미완료)
 
 * 문제해결
 1) ajax 동기처리 => async : false
@@ -13,7 +21,7 @@ score 테이블 place_name,place_address 유니크 키 설정
 reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0  
 
 ## 2020-12-03
-수정사항
+### 수정사항
 
 ![image](https://user-images.githubusercontent.com/49560745/101027837-e90c8380-35bb-11eb-825c-e1ccea195161.png)
 
@@ -30,7 +38,7 @@ mybatis mapper 설정에서
 => dom 트리 파싱 => script태그는 body 태그 최하단에 둘수록 좋다.
 
 ## 2020-12-02
-수정사항
+### 수정사항
 
 ![image](https://user-images.githubusercontent.com/49560745/100887421-4d660f00-34f8-11eb-8c57-31412d69cc95.png)
 
