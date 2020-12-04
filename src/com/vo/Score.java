@@ -3,7 +3,14 @@ package com.vo;
 public class Score {
 	String place_name;
 	String place_address;
-	int score;
+	float score;
+	int count;
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public String getPlace_name() {
 		return place_name;
 	}
@@ -16,7 +23,7 @@ public class Score {
 	public void setPlace_address(String place_address) {
 		this.place_address = place_address;
 	}
-	public int getScore() {
+	public float getScore() {
 		return score;
 	}
 	public void setScore(int score) {
@@ -24,6 +31,7 @@ public class Score {
 	}
 	@Override
 	public String toString() {
-		return "Score [place_name=" + place_name + ", place_address=" + place_address + ", score=" + score + "]";
+		return "Score [place_name=" + place_name + ", place_address=" + place_address + ", score=" + score + ", count="
+				+ count + "]";
 	}
 }

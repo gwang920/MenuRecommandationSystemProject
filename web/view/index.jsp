@@ -27,8 +27,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
-<link
-	href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900"
+<link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900"
 	rel="stylesheet">
 
 <link rel="stylesheet" href="view/css/alertify.core.css" />
@@ -135,6 +134,19 @@ https://templatemo.com/tm-528-elegance
 #eat_font {
 	font-size: 50px;
 }
+
+
+.star_rating {font-size:0; letter-spacing:-4px; color:#f5f5dc}
+.star_rating a {
+    font-size:22px;
+    letter-spacing:0;
+    display:inline-block;
+    margin-left:5px;
+    color:#f5f5dc;
+    text-decoration:none;
+}
+.star_rating a:first-child {margin-left:0;}
+.star_rating a.on {color:#0080ff;}
 
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
@@ -421,7 +433,7 @@ https://templatemo.com/tm-528-elegance
 								<div class="input-field">
 									
 									<input type="text" class="form-control" name="map_address"
-										id="map_address" required placeholder="주소를 입력해주세요">
+										id="map_address" required placeholder="지역을 입력해주세요. 예) 강남역">
 									
 								</div>
 								
@@ -464,7 +476,6 @@ https://templatemo.com/tm-528-elegance
 					</div>
 				</c:when>
 			</c:choose>
-			
 
 		</div>
 			<script>
@@ -478,7 +489,7 @@ https://templatemo.com/tm-528-elegance
 				
 				
 				var numSegments = 0;
-				var FoodList = new Array();
+				var FoodList;
 				var flag = 0;
 				var theWheel;
 			
@@ -520,6 +531,8 @@ https://templatemo.com/tm-528-elegance
 							success : function(data) {
 
 								var index = 0;
+								FoodList=new Array();
+								numSegments=0;
 								foodJson = JSON.parse(data);
 								$.each(foodJson, function() {
 
@@ -553,33 +566,44 @@ https://templatemo.com/tm-528-elegance
 					}
 
 				});
+				
 				function get_score(place_name,place_address){
-					alert("get_score_start");
+					var score_info;
 					$.ajax({
 						url : "getScore.mc",
 						type : "POST",
 						data : {
 							"place_name" : place_name, "place_address":place_address
 						},
+						async : false,
 						success : function(data) {
-							alert(data);
+							var cnt=data[0].count;
+							score_info=(data[0].score/cnt).toFixed(1);
 						}
 					});
+					if(score_info===undefined){
+						score_info="아직 평점이 없는 식당입니다!";
+					}else{
+						score_info=score_info+"/5.0";
+					}
+					return score_info;
 				};
 				
 				// overlay 설정
 				var overlay=null;
+				var places_place_name;
+				var places_road_address;
+				var places_address_name;
+				var places_phone=document;
 				$(document).ready(function(){
 				      $(document).on("click","#placesList > .item",function(event){
 				    	  var idx=$(this).index();
-				    	  var places_place_name= document.getElementById("places_place_name"+idx).innerText;
-				    	  var places_road_address=document.getElementById("places_road_address"+idx).textContent;
-				    	  var places_address_name=document.getElementById("places_address_name"+idx).textContent;
-				    	  var places_phone=document.getElementById("places_phone"+idx).textContent;
+				    	   places_place_name= document.getElementById("places_place_name"+idx).innerText;
+				    	   places_road_address=document.getElementById("places_road_address"+idx).textContent;
+				    	   places_address_name=document.getElementById("places_address_name"+idx).textContent;
+				    	   places_phone=document.getElementById("places_phone"+idx).textContent;
+				    	  
 				    	  // 주소-좌표 변환 객체를 생성합니다
-				    	  
-				    	  get_score(places_place_name,places_road_address);
-				    	  
 				    	  var geocoder = new kakao.maps.services.Geocoder();
 						  // 주소로 좌표를 검색합니다
 						  geocoder.addressSearch(places_address_name, function(result, status) {
@@ -589,7 +613,7 @@ https://templatemo.com/tm-528-elegance
 							        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 							        var content = '<div class="wrap">' + 
 							                   '    <div class="info">' + 
-							                   '        <div class="title">' + 
+							                   '        <div class="title" id="place_title">' + 
 							                               places_place_name + 
 							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
 							                   '        </div>' + 
@@ -598,12 +622,12 @@ https://templatemo.com/tm-528-elegance
 							                   '                <img src="view/images/food/' + foodName + '.PNG"  style="max-width: 100%; height: auto;">' +
 							                   '           </div>' + 
 							                   '            <div class="desc">' + 
-							                   '                <div class="ellipsis">'+places_road_address+'</div>' + 
-							                   '                <div class="jibun ellipsis">'+places_address_name+'</div>' + 
+							                   '                <div class="ellipsis" id="place_road_address">'+places_road_address+'</div>' + 
+							                   '                <div class="jibun ellipsis" id="place_address">'+places_address_name+'</div>' + 
 							                   '                <br>' + 
 							                   '                <br>' + 
 							                   '  				<div class="score">평점</div>' +
-							                   '  				<div class="score">4.5/5.0</div>' +
+							                   '  				<div class="score" id="get_score">'+get_score(places_place_name,places_road_address)+'</div>' +
 							                   '  				<div class="score" id="go_to_review">리뷰를 확인해 보세요!</div>' +
 							                   '                <br>' + 
 							                   '                <br>' + 
@@ -643,14 +667,108 @@ https://templatemo.com/tm-528-elegance
 							          });
 							      });
 				
+				// 리뷰 보기
 				$(document).ready(function(){
 					$(document).on("click","#go_to_review",function(event){
+				    	  var places_place_name= document.getElementById("place_title").innerText;
+				    	  var places_address_name=document.getElementById("place_address").textContent;
+				    	  
+				    	  
+				    	  // 주소-좌표 변환 객체를 생성합니다
+				    	  var geocoder = new kakao.maps.services.Geocoder();
+						  // 주소로 좌표를 검색합니다
+						  geocoder.addressSearch(places_address_name, function(result, status) {
+							  // 정상적으로 검색이 완료됐으면 
+							  if (status === kakao.maps.services.Status.OK) {
+							        var foodName=document.getElementById('food_name').innerHTML;
+							        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+							        var content = '<div class="wrap">' + 
+							                   '    <div class="info">' + 
+							                   '        <div class="title">' + 
+							                               places_place_name + 
+							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
+							                   '        </div>' + 
+							                   '        <div class="body">' + 
+							                   '            <div class="desc">' + 
+							                   '                <div class="ellipsis"></div>' + 
+							                   '                <div class="jibun ellipsis">리뷰</div>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '  				<div></div>' +
+							                   '  				<div><p class="star_rating"><a href="#" >★</a><a href="#" >★</a><a href="#" >★</a><a href="#">★</a><a href="#">★</a></p></div>' +
+							                   '  				<div id="star_click"></div>' +
+							                   '                <br>' + 
+							                   '                <br>' +  	
+							                   '        	</div>' + 
+							                   '        </div>' + 
+							                   '    </div>' +  
+							                   '</div>';
+									
+							                   
+									if(overlay!=null){
+									   overlay.setMap(null);   
+									}
+
+							       // 마커 위에 커스텀오버레이를 표시합니다
+							       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+							       overlay = new kakao.maps.CustomOverlay({
+							           content: content,
+							           map: map,
+							           position: coords  
+							       });
+							       
+							       
+							       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
+							       
+							       map.setLevel(4);
+							       map.setCenter(coords);
+							       
+							       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+							       overlay.setMap(map);
+									$(document).on("click","#closeOverlay",function(event){
+										overlay.setMap(null);  
+									});
+									
+							               } 
+							           });  
+						 
+					});
+				});
+				
+				// 평점하기
+				var star_idx;
+				$(document).ready(function(){
+					$(document).on("click",".star_rating a",function(event){
+					     $(this).parent().children("a").removeClass("on");
+					     $(this).addClass("on").prevAll("a").addClass("on");
+					     star_idx=$(this).index();
+					     alert(star_idx);
+					     document.getElementById("star_click").innerHTML="평점하기";
+					     return false;
+					});
+				});
+				
+				// 평점올리기
+				$(document).ready(function(){
+					$(document).on("click","#star_click",function(event){
+						var form={place_name:places_place_name
+								,place_address: places_road_address
+								,score: star_idx+1
+								,count:1}
+						$.ajax({
+							url : "scoreUpdateImpl.mc",
+							type : "POST",
+							data : form,
+							async : false,
+							success : function(data) {
+								alertify.alert("평점올리기 완료");
+							}
+						});
 					});
 				});
 				
 				
-				
-				// 키워드로 장소를 검색합니다
+				// 키워드로 장소 검색
 				$("#btn_map_search").click(function(){
 					if(overlay!=null){
 						   overlay.setMap(null);   
@@ -669,7 +787,6 @@ https://templatemo.com/tm-528-elegance
 				});
 
 				$("#start_check").click(function() {
-
 					location.href = "#slide04";
 				});
 
@@ -782,6 +899,7 @@ https://templatemo.com/tm-528-elegance
 					document.getElementById('pw1').className = ""; // Remove all colours from the power level indicators.
 					document.getElementById('pw2').className = "";
 					document.getElementById('pw3').className = "";
+					document.getElementById('food_name').innerHTML="";
 
 					wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
 				}

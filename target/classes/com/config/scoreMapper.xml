@@ -13,9 +13,16 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	resultType="Score">
 		SELECT * FROM SCORE ORDER BY 1
 	</select>
+	
 	<insert id="insert" parameterType="Score">
-		INSERT INTO SCORE VALUES (#{place_name},#{place_address},#{score})
+		INSERT INTO SCORE VALUES (#{place_name},#{place_address},#{score},#{count}));
 	</insert>
+	
+	<update id="update" parameterType="Score">
+		UPDATE SCORE SET score=score + #{score},count=count+1 WHERE place_name=#{place_name} and place_address=#{place_address}
+	</update>
+	
+	
 </mapper>
 
 

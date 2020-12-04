@@ -27,6 +27,7 @@ public class scoreDao implements ObjectDao<String, Score> {
 
 	@Override
 	public void update(Score v) {
+		sm.update(v);
 	}
 
 	@Override

@@ -21,25 +21,38 @@ public class ScoreController {
 	ObjectBiz<String, Score> biz;
 	
 	@RequestMapping("/scoreInsertImpl.mc")
-	public ModelAndView joinImpl(ModelAndView mv, Score score) {
-		System.out.println("scoreInsertImpl");
-		mv.setViewName("index");
-		biz.insert(score);
+	@ResponseBody
+	public void scoreInsertImpl(Score score) {
 		System.out.println(score);
-		return mv;
+		try {
+			biz.insert(score);
+		} catch (Exception e) {
+			System.out.println("scoreInsertImpl error");
+		}
 	}
-
 	
+	@RequestMapping("/scoreUpdateImpl.mc")
+	@ResponseBody
+	public void scoreUpdateImpl(Score score) {
+		System.out.println(score);
+		try {
+			biz.update(score);
+		} catch (Exception e) {
+			System.out.println("scoreUpdateImpl error");
+		}
+	}
+	
+
 	@RequestMapping("/getScore.mc")
 	@ResponseBody
 	public ArrayList<Score> getScore(String place_name,String place_address) {
-		System.out.println(biz.selectAll());
+		ArrayList<Score> sc=new ArrayList<Score>();
 		try {
-			System.out.println(biz.select(place_name,place_address));
+			sc=biz.select(place_name,place_address);
+			System.out.println(sc);
 		} catch (Exception e) {
 			System.out.println("error");
 		}
-		
-		return biz.select(place_name,place_address);
+		return sc;
 	}
 }

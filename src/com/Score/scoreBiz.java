@@ -28,6 +28,7 @@ public class scoreBiz implements ObjectBiz<String, Score> {
 
 	@Override
 	public void update(Score v) {
+		dao.update(v);
 	}
 
 	@Override
