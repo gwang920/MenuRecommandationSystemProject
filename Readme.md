@@ -1,16 +1,16 @@
 2020-12-04
 수정사항
 
-score 테이블 place_name,place_address 유니크 키 설정 
-=> 매번 모든 별점을 가져와 계산하는 것은 큰 부하를 발생한다고 판단되어 테이블에는
-매번 갱신된(평균별점값) 값을 넣어주는 것으로 변경
+score 테이블 place_name,place_address 유니크 키 설정  
+=> 매번 모든 별점을 가져와 계산하는 것은 큰 부하를 발생한다고 판단되어  
+테이블에는 매번 갱신된(평균별점값) 값을 넣어주는 것으로 변경
 
 
 * 문제해결
 1) ajax 동기처리 => async : false
 2) [object Object] 객체 접근 => 배열에 먼저 접근하고, 프로퍼티에 접근하기 ex)obj[0].score
-3) mapper에 두개이상의 파라미터 넘기기 => @Param
-reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0
+3) mapper에 두개이상의 파라미터 넘기기 => @Param  
+reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0  
 
 2020-12-03
 수정사항
