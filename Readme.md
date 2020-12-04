@@ -1,4 +1,4 @@
-2020-12-04
+## 2020-12-04
 수정사항
 
 score 테이블 place_name,place_address 유니크 키 설정  
@@ -12,7 +12,7 @@ score 테이블 place_name,place_address 유니크 키 설정
 3) mapper에 두개이상의 파라미터 넘기기 => @Param  
 reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0  
 
-2020-12-03
+## 2020-12-03
 수정사항
 
 ![image](https://user-images.githubusercontent.com/49560745/101027837-e90c8380-35bb-11eb-825c-e1ccea195161.png)
@@ -29,7 +29,7 @@ mybatis mapper 설정에서
 => jsp 파일을 js로 모듈화할 때, 공유하는 변수를 어떤 방식으로 지정해야할까?
 => dom 트리 파싱 => script태그는 body 태그 최하단에 둘수록 좋다.
 
-2020-12-02
+## 2020-12-02
 수정사항
 
 ![image](https://user-images.githubusercontent.com/49560745/100887421-4d660f00-34f8-11eb-8c57-31412d69cc95.png)
