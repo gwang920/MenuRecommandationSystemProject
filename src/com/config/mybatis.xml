@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
 		<typeAlias type="com.vo.User" alias="user"/>
 		<typeAlias type="com.vo.Board" alias="board"/>
 		<typeAlias type="com.vo.Food" alias="food"/>
+		<typeAlias type="com.vo.Review" alias="review"/>
 		<typeAlias type="com.vo.Score" alias="score"/>
 	</typeAliases>
 	
@@ -19,6 +20,7 @@ PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
 		<mapper resource="com/config/preferenceMapper.xml"/>
 		<mapper resource="com/config/userMapper.xml"/>
 		<mapper resource="com/config/scoreMapper.xml"/>
+		<mapper resource="com/config/reviewMapper.xml"/>
 	</mappers>
 </configuration>
 

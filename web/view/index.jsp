@@ -20,7 +20,7 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=LIBRARY"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0d6e6a070335aaa5e70c85e9c45b206&libraries=services,clusterer,drawing"></script>
-			
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
 <meta charset="utf-8">
 <meta name="viewport"
@@ -135,6 +135,16 @@ https://templatemo.com/tm-528-elegance
 	font-size: 50px;
 }
 
+#star_click:hover{
+	color:#0080ff
+}
+
+ input[type=text] {
+ padding: 10px;
+ text-align: left;
+ margin: 0px;
+ font-size:15px;
+}
 
 .star_rating {font-size:0; letter-spacing:-4px; color:#f5f5dc}
 .star_rating a {
@@ -196,12 +206,13 @@ https://templatemo.com/tm-528-elegance
     .info .title {padding: 5px 0 0 10px;height: 70px;background: #eee;border-bottom: 1px solid #ddd;font-size: 35px;font-weight: bold;}
     .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
     .info .close:hover {cursor: pointer;}
-    .info .body {position: relative; }
+    .info .body {position: relative; margin-left:5%; font_family:fantasy;}
     .info .desc {position: relative; text-align:center; margin: 13px 5px 0 90px;height: 100px;}
     .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;  font-size: 20px;}
     .desc .jibun {color: #888;margin-top: -2px; font-size: 20px;}
     .desc .score {color: #888; margin-top:-2px; font-size:25px;}
-    #go_to_review {border-bottom: 1px solid #bcbcbc; width:280px; margin-left:115px;}
+    #go_to_review {border-bottom: 1px solid #bcbcbc; width:280px; margin-left:103px; font-weight:bold;}
+    #review_title {border-bottom: 1px solid #bcbcbc; width:65px; margin-left:5px; font-weight:bold; font-size:30px}
     .info .img {position: absolute;top: 6px;left: 5px;width: 140px;height: 140px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 25%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB; font-size: 20px;}
@@ -486,8 +497,6 @@ https://templatemo.com/tm-528-elegance
 					}, 1500, 'easeInOutExpo');
 				};
 				
-				
-				
 				var numSegments = 0;
 				var FoodList;
 				var flag = 0;
@@ -585,6 +594,7 @@ https://templatemo.com/tm-528-elegance
 					});
 					if(score_info===undefined){
 						score_info="아직 평점이 없는 식당입니다!";
+						score_count=undefined;
 					}else{
 						score_info=score_info+"/5.0";
 					}
@@ -630,10 +640,9 @@ https://templatemo.com/tm-528-elegance
 							                   '                <br>' + 
 							                   '  				<div class="score">평점</div>' +
 							                   '  				<div class="score" id="get_score">'+get_score(places_place_name,places_road_address)+'</div>' +
-							                   '  				<div class="score" id="go_to_review">리뷰를 확인해 보세요!</div>' +
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <div><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank" class="link">네이버 검색!</a></div>' + 	
+							                   '  				<span class="star_rating"><a href="#" >★</a><a href="#" >★</a><a href="#" >★</a><a href="#">★</a><a href="#">★</a></span><div id="star_click" style="font-size: 19px;">평점하기</div>' +
+							                   '				<br>'+ 
+							                   '  				<div class="score" id="go_to_review">리뷰를 확인해 보세요!</div>' + 	
 							                   '        	</div>' + 
 							                   '        </div>' + 
 							                   '    </div>' +  
@@ -669,13 +678,27 @@ https://templatemo.com/tm-528-elegance
 							          });
 							      });
 				
+				function get_Content(){
+					var plc=document.getElementById("place_road_address").innerText;
+					var contents;
+					$.ajax({
+						url:"select_review.mc",
+						type:"POST",
+						data:{"place_address":plc},
+						async:false,
+						success:function(data){
+							alert(data);
+							contents=data;
+						}
+					});
+					return contents;
+				}
 				// 리뷰 보기
 				$(document).ready(function(){
 					$(document).on("click","#go_to_review",function(event){
 				    	  var places_place_name= document.getElementById("place_title").innerText;
 				    	  var places_address_name=document.getElementById("place_address").textContent;
-				    	  
-				    	  
+				    	  var contents=get_Content();
 				    	  // 주소-좌표 변환 객체를 생성합니다
 				    	  var geocoder = new kakao.maps.services.Geocoder();
 						  // 주소로 좌표를 검색합니다
@@ -691,17 +714,23 @@ https://templatemo.com/tm-528-elegance
 							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
 							                   '        </div>' + 
 							                   '        <div class="body">' + 
-							                   '				<br>'+	
-							                   '				<div style="font-size: 19px;">평점을 남겨보세요!</div>'+
-							                   '  				<div><p class="star_rating"><a href="#" >★</a><a href="#" >★</a><a href="#" >★</a><a href="#">★</a><a href="#">★</a></p></div>' +
-							                   '  				<div id="star_click" style="font-size: 19px;"></div>' +
 							                   '            	<div>' +
+							                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span>' + 
 							                   ' 				<br>' +		
-							                   '                <div class="ellipsis" style="text-align:left; font-size: 20px;">리뷰</div>' + 
-							                   '                <div class="jibun ellipsis" style="text-align:left; font-size: 15px;">1. 여기  맛있읍니다 ^^ 곱창 드세요 ㅋㅋ </div>' + 
+							                   ' 				<br>' +		
+							                   '                <div class="jibun ellipsis" id="review_content" style="text-align:left; font-size: 15px;">'+contents[0].content+ '</div>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
+							                   '                <br>' + 
 							                   '                <br>' + 
 							                   '                <br>' + 
 							                   '  				<div></div>' +
+							                   '  				<input type="text" id="review_content" style="width:300px; line-height=200px;" required minlength="2" maxlength="40" size="15"><span id="load_review" style="font-size:25px;"> 클릭</span>' +
 							                   '                <br>' + 
 							                   '                <br>' +  	
 							                   '        	</div>' + 
@@ -740,6 +769,8 @@ https://templatemo.com/tm-528-elegance
 					});
 				});
 				
+				
+				
 				// 평점하기
 				var star_idx;
 				$(document).ready(function(){
@@ -747,7 +778,6 @@ https://templatemo.com/tm-528-elegance
 					     $(this).parent().children("a").removeClass("on");
 					     $(this).addClass("on").prevAll("a").addClass("on");
 					     star_idx=$(this).index();
-					     document.getElementById("star_click").innerHTML="평점하기";
 					     return false;
 					});
 				});
@@ -759,15 +789,14 @@ https://templatemo.com/tm-528-elegance
 								,place_address: places_road_address
 								,score: star_idx+1
 								,count:1}
-						
-						if(score_count){
+						if(score_count!==undefined){
 							$.ajax({
 								url : "scoreUpdateImpl.mc",
 								type : "POST",
 								data : form,
 								async : false,
 								success : function(data) {
-									alertify.alert("평점올리기 완료1");
+									alertify.alert("평점등록완료!");
 								}
 							});
 						}else{
@@ -777,12 +806,43 @@ https://templatemo.com/tm-528-elegance
 								data : form,
 								async : false,
 								success : function(data) {
-									alertify.alert("평점올리기 완료2");
+									alertify.alert("평점등록완료!");
 								}
 							});
 						}
+						document.getElementById('get_score').innerHTML =get_score(places_place_name,places_road_address);
+						
 					});
 				});
+				
+				
+				$(document).ready(function(){
+					$(document).on("click","#load_review",function(){
+						var date=new Date();
+						var d=(moment(date).format('YYYY MM DD HH:mm:ss')).toString();
+						var content=document.getElementById('review_content').value;
+						// int 타입 null 설정 안된다(?)
+						var form={
+							review_id:0,
+							time:d,
+							content:content,
+							user_id:user_id,
+							is_deleted:"FALSE",
+							place_name:places_place_name,
+							place_address: places_road_address
+						};
+						$.ajax({
+							url: "upload_review.mc",
+							type: "POST",
+							data: form,
+							async:false,
+							success:function(data){
+								alert("리뷰 전송 완료");
+							}
+						});
+					});
+				});
+				
 				
 				
 				// 키워드로 장소 검색
@@ -917,6 +977,7 @@ https://templatemo.com/tm-528-elegance
 					document.getElementById('pw2').className = "";
 					document.getElementById('pw3').className = "";
 					document.getElementById('food_name').innerHTML="";
+					document.getElementById('start_check').innerHTML="";
 
 					wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
 				}
