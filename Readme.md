@@ -23,7 +23,10 @@ reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%
 ## 2020-12-03
 ### 수정사항
 
-![image](https://user-images.githubusercontent.com/49560745/101027837-e90c8380-35bb-11eb-825c-e1ccea195161.png)
+![image](https://user-images.githubusercontent.com/49560745/101140619-8ae0ae80-3656-11eb-9b08-6418a33adb72.png)
+
+
+
 
 1) 별점 테이블 구축
 2) 식당 클릭 이벤트 content 추가( 별점, naver링크)
