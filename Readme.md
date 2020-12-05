@@ -1,3 +1,20 @@
+## 2020-12-05
+### 수정사항
+
+![image](https://user-images.githubusercontent.com/49560745/101243135-834a0400-3741-11eb-9eb0-1bfd0d7dd092.png)
+![image](https://user-images.githubusercontent.com/49560745/101243147-9361e380-3741-11eb-8244-9c8f8f1cfe82.png)
+
+
+1) 리뷰 기능 구현  
+- review 테이블 구현  
+- insert, select 구현   
+( 미완성 : 리뷰 데이터 페이지 당 개수 제한 + 번호 넘기기 기능으로 구현하기 )
+2) UI 변경
+
+
+- reference   
+mybatis sql 관련 -https://sinna94.tistory.com/entry/MyBatis-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%82%BD%EC%9E%85%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4?category=696828
+
 ## 2020-12-04
 ### 수정사항
 
@@ -18,7 +35,7 @@
 1) ajax 동기처리 => async : false
 2) [object Object] 객체 접근 => 배열에 먼저 접근하고, 프로퍼티에 접근하기 ex)obj[0].score
 3) mapper에 두개이상의 파라미터 넘기기 => @Param  
-reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0  
+- reference - https://foryamu.tistory.com/entry/MyBatis-parameterType-HashMap-%EA%B4%80%EB%A0%A8-%EC%98%88%EC%8B%9C%EB%8B%A4%EC%A4%91%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0  
 
 ## 2020-12-03
 ### 수정사항
