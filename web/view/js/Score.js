@@ -47,7 +47,6 @@
 								data : form,
 								async : false,
 								success : function(data) {
-									alertify.alert("평점등록완료!");
 								}
 							});
 						}else{
@@ -57,7 +56,6 @@
 								data : form,
 								async : false,
 								success : function(data) {
-									alertify.alert("평점등록완료!");
 								}
 							});
 						}

@@ -9,7 +9,6 @@ function now_Date(){
 
 
 function dateToSeconds(date){
-	//alert(date);
 	var year=date.substring(0,4)*31104000; // 1866240000
 	var month=date.substring(4,6)*25920000; // 31104000
 	var day=date.substring(6,8)*86400;  // 25920000

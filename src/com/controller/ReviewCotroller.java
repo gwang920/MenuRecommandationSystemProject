@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.frame.ObjectBiz;
 import com.vo.Review;
-import com.vo.Score;
 
 @Controller
 public class ReviewCotroller {
@@ -33,15 +32,18 @@ public class ReviewCotroller {
 	
 	@RequestMapping("/select_review.mc")
 	@ResponseBody
-	public ArrayList<Review> select_review(String place_address) {
+	public ArrayList<Review> select_review(String place_address,int page) {
 		ArrayList<Review> rs=new ArrayList<Review>();
-		System.out.println("address= "+ place_address);
+		ArrayList<Review> frs=new ArrayList<Review>();
 		try {
 			rs=biz.select(place_address);
+			for(int i=page*5;i<=page+6;i++) {
+				if(i>=rs.size()) break;
+				frs.add(rs.get(i));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(rs);
-		return rs;
+		return frs;
 	}
 }

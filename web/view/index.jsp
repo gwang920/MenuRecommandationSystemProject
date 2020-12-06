@@ -492,8 +492,6 @@ https://templatemo.com/tm-528-elegance
 			<script>
 				var user_id = '${loginInfo.id}'; //따옴표 씌우기
 				
-				
-				
 				// overlay 설정
 				var overlay=null;
 				var places_place_name;
@@ -571,13 +569,15 @@ https://templatemo.com/tm-528-elegance
 							          });
 							      });
 				
+				
+				
 				// review contents 가져오기
-				function get_Content(){
+				function get_Content(page){
 					var contents=" ";
 					$.ajax({
 						url:"select_review.mc",
 						type:"POST",
-						data:{"place_address":places_road_address},
+						data:{"place_address":places_road_address,"page":page},
 						async:false,
 						success:function(data){
 							contents=data;
@@ -585,14 +585,21 @@ https://templatemo.com/tm-528-elegance
 					});
 					var content_set="";
 					contents.forEach(function(item){
-						content_set=item.content+" - "+item.user_id+" ("+date_parse(now_Date(),item.time)+")";
+						content_set+='<span class="jibun ellipsis" id="review_content" style="text-align:left; display:inline-block; width:400px; font-size: 15px; font-weight:bold;">'+item.content+'</span><span id="review_user_id" style="font-size:15px; font-weight:bold;">'+item.user_id+'</span><span style="font-size:14px;"> '+date_parse(now_Date(),item.time)+'</span><br>';
+		                 
 					})
+					for(var i=0;i<9-contents.length;i++){
+						content_set+='<br>';
+					}
 					
-					return content_set;
+					
+					if(contents.length===0) content_set+='<br>';
+					
+					return content_set+'<br>';
 				}
 				
 				
-				function review_content_load(){
+				function review_content_load(page){
 			    	  // 주소-좌표 변환 객체를 생성합니다
 			    	  var geocoder = new kakao.maps.services.Geocoder();
 					  // 주소로 좌표를 검색합니다
@@ -611,21 +618,8 @@ https://templatemo.com/tm-528-elegance
 						                   '            	<div>' +
 						                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span>' + 
 						                   ' 				<br>' +		
-						                   ' 				<br>' +		
-						                   '                <div class="jibun ellipsis" id="review_content" style="text-align:left; font-size: 15px;">'+get_Content()+'</div>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '                <br>' + 
-						                   '  				<div></div>' +
-						                   '                <br>' + 
-						                   '  				<input type="text" id="review_content_input" style="width:500px; line-height=100px;" required minlength="2" maxlength="40" size="15"><span id="upload_review" style="font-size:25px;"> 입력</span>' +
+						                   ' 				<br>' +	get_Content(page) +	
+						                   '  				<input type="text" id="review_content_input" style="width:500px; height:17px;" required minlength="2" maxlength="40" size="15"><span id="upload_review" style="font-size:25px; font-weight:bold;"> 입력</span>' +
 						                   '                <br>' +  	
 						                   '        	</div>' + 
 						                   '        </div>' + 
@@ -665,7 +659,7 @@ https://templatemo.com/tm-528-elegance
 				// 리뷰 보기
 				$(document).ready(function(){
 					$(document).on("click","#go_to_review",function(event){
-						review_content_load();
+						review_content_load(0);
 					});
 				});
 
@@ -673,6 +667,10 @@ https://templatemo.com/tm-528-elegance
 					$(document).on("click","#upload_review",function(){
 						var d=now_Date();
 						var content=document.getElementById('review_content_input').value;
+						if(content===null || content===undefined || content===""){
+							alertify.alert("글을 입력해주세요.");
+							return;
+						}
 						// int 타입 null 설정 안된다(?)
 						var form={
 							review_id:0,

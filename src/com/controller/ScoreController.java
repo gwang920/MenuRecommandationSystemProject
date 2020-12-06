@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.frame.ObjectBiz;
 import com.vo.Score;
@@ -51,7 +50,6 @@ public class ScoreController {
 		ArrayList<Score> sc=new ArrayList<Score>();
 		try {
 			sc=biz.select(place_name,place_address);
-			System.out.println(sc);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("error");
