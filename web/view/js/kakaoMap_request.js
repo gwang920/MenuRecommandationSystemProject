@@ -1,6 +1,5 @@
 // 마커를 담을 배열입니다
 var markers = [];
-
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -17,6 +16,8 @@ var ps = new kakao.maps.services.Places();
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 
+
+
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
 	var food=roullet_result.text;
@@ -29,6 +30,8 @@ function searchPlaces() {
     // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
     ps.keywordSearch( keyword+food, placesSearchCB); 
 }
+
+
 
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB(data, status, pagination) {

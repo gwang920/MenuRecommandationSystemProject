@@ -1966,7 +1966,7 @@ function Animation(options)
         'direction'         : 'clockwise',     // clockwise or anti-clockwise.
         'propertyName'      : null,            // The name of the winning wheel property to be affected by the animation.
         'propertyValue'     : null,            // The value the property is to be set to at the end of the animation.
-        'duration'          : 10,              // Duration of the animation.
+        'duration'          : 1,              // Duration of the animation.
         'yoyo'              : false,           // If the animation is to reverse back again i.e. yo-yo.
         'repeat'            : null,            // The number of times the animation is to repeat, -1 will cause it to repeat forever.
         'easing'            : null,            // The easing to use for the animation, default is the best for spin to stop. Use Linear.easeNone for no easing.

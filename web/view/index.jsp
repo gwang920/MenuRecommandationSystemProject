@@ -491,115 +491,8 @@ https://templatemo.com/tm-528-elegance
 		</div>
 			<script>
 				var user_id = '${loginInfo.id}'; //따옴표 씌우기
-				function delete1() {
-					$('html, body').animate({
-						scrollTop : target.offset().top - top_space
-					}, 1500, 'easeInOutExpo');
-				};
-				
-				var numSegments = 0;
-				var FoodList;
-				var flag = 0;
-				var theWheel;
-			
-				function makeRoullet() {
-					//Create new wheel object specifying the parameters at creation time.
-					theWheel = new Winwheel({
-						'numSegments' : numSegments, // Specify number of segments.
-						'outerRadius' : 212, // Set outer radius so wheel fits inside the background.
-						'textFontSize' : 28, // Set font size as desired.
-						'segments' : FoodList// Define segments including colour and text.
-						,
-						'animation' : // Specify the animation to use.
-						{
-							'type' : 'spinToStop',
-							'duration' : 15,
-							'spins' : 8,
-							'callbackFinished' : alertPrize,
-							'callbackSound' : playSound, // Function to call when the tick sound is to be triggered.
-							'soundTrigger' : 'pin' // Specify pins are to trigger the sound, the other option is 'segment'.
-						},
-						'pins' : {
-							'number' : 16
-						// Number of pins. They space evenly around the wheel.
-						}
-					});
-
-					location.href = "#slide03";
-				}
-
-				$('.go_to_roullet').click(function() {
-					if (user_id != null) {
-						var foodJson;
-						$.ajax({
-							url : "add_pre_roullet.mc",
-							type : "POST",
-							data : {
-								"id" : user_id
-							},
-							success : function(data) {
-
-								var index = 0;
-								FoodList=new Array();
-								numSegments=0;
-								foodJson = JSON.parse(data);
-								$.each(foodJson, function() {
-
-									if (numSegments % 2 == 0) {
-										numSegments++;
-
-										FoodList.push({
-											'fillStyle' : '#EAEAEA',
-											'text' : this.name
-										});
-
-									} else {
-										numSegments++;
-										FoodList.push({
-											'fillStyle' : '#F6F6F6',
-											'text' : this.name
-										});
-
-									}
-									makeRoullet();
-									draw('img01');
-
-								})
-
-							}
-						});
-
-					} else {
-						makeRoullet();
-						draw('img01');
-					}
-
-				});
 				
 				
-				var score_count;
-				function get_score(place_name,place_address){
-					var score_info;
-					$.ajax({
-						url : "getScore.mc",
-						type : "POST",
-						data : {
-							"place_name" : place_name, "place_address":place_address
-						},
-						async : false,
-						success : function(data) {
-							score_count=data[0].count;
-							score_info=(data[0].score/score_count).toFixed(1);
-						}
-					});
-					if(score_info===undefined){
-						score_info="아직 평점이 없는 식당입니다!";
-						score_count=undefined;
-					}else{
-						score_info=score_info+"/5.0";
-					}
-					return score_info;
-				};
 				
 				// overlay 설정
 				var overlay=null;
@@ -678,149 +571,108 @@ https://templatemo.com/tm-528-elegance
 							          });
 							      });
 				
+				// review contents 가져오기
 				function get_Content(){
-					var plc=document.getElementById("place_road_address").innerText;
-					var contents;
+					var contents=" ";
 					$.ajax({
 						url:"select_review.mc",
 						type:"POST",
-						data:{"place_address":plc},
+						data:{"place_address":places_road_address},
 						async:false,
 						success:function(data){
-							alert(data);
 							contents=data;
 						}
 					});
-					return contents;
+					var content_set="";
+					contents.forEach(function(item){
+						content_set=item.content+" - "+item.user_id+" ("+date_parse(now_Date(),item.time)+")";
+					})
+					
+					return content_set;
 				}
+				
+				
+				function review_content_load(){
+			    	  // 주소-좌표 변환 객체를 생성합니다
+			    	  var geocoder = new kakao.maps.services.Geocoder();
+					  // 주소로 좌표를 검색합니다
+					  geocoder.addressSearch(places_address_name, function(result, status) {
+						  // 정상적으로 검색이 완료됐으면 
+						  if (status === kakao.maps.services.Status.OK) {
+						        var foodName=document.getElementById('food_name').innerHTML;
+						        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						        var content = '<div class="wrap">' + 
+						                   '    <div class="info">' + 
+						                   '        <div class="title">' + 
+						                               places_place_name + 
+						                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
+						                   '        </div>' + 
+						                   '        <div class="body">' + 
+						                   '            	<div>' +
+						                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span>' + 
+						                   ' 				<br>' +		
+						                   ' 				<br>' +		
+						                   '                <div class="jibun ellipsis" id="review_content" style="text-align:left; font-size: 15px;">'+get_Content()+'</div>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '                <br>' + 
+						                   '  				<div></div>' +
+						                   '                <br>' + 
+						                   '  				<input type="text" id="review_content_input" style="width:500px; line-height=100px;" required minlength="2" maxlength="40" size="15"><span id="upload_review" style="font-size:25px;"> 입력</span>' +
+						                   '                <br>' +  	
+						                   '        	</div>' + 
+						                   '        </div>' + 
+						                   '    </div>' +  
+						                   '</div>';
+								
+						                   
+								if(overlay!=null){
+								   overlay.setMap(null);   
+								}
+
+						       // 마커 위에 커스텀오버레이를 표시합니다
+						       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+						       overlay = new kakao.maps.CustomOverlay({
+						           content: content,
+						           map: map,
+						           position: coords  
+						       });
+						       
+						       
+						       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
+						       
+						       map.setLevel(4);
+						       map.setCenter(coords);
+						       
+						       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+						       overlay.setMap(map);
+								$(document).on("click","#closeOverlay",function(event){
+									overlay.setMap(null);  
+								});
+								
+						               } 
+						           });  
+					
+				}
+				
 				// 리뷰 보기
 				$(document).ready(function(){
 					$(document).on("click","#go_to_review",function(event){
-				    	  var places_place_name= document.getElementById("place_title").innerText;
-				    	  var places_address_name=document.getElementById("place_address").textContent;
-				    	  var contents=get_Content();
-				    	  // 주소-좌표 변환 객체를 생성합니다
-				    	  var geocoder = new kakao.maps.services.Geocoder();
-						  // 주소로 좌표를 검색합니다
-						  geocoder.addressSearch(places_address_name, function(result, status) {
-							  // 정상적으로 검색이 완료됐으면 
-							  if (status === kakao.maps.services.Status.OK) {
-							        var foodName=document.getElementById('food_name').innerHTML;
-							        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-							        var content = '<div class="wrap">' + 
-							                   '    <div class="info">' + 
-							                   '        <div class="title">' + 
-							                               places_place_name + 
-							                   '            <div class="close" id="closeOverlay" title="닫기"></div>' + 
-							                   '        </div>' + 
-							                   '        <div class="body">' + 
-							                   '            	<div>' +
-							                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span>' + 
-							                   ' 				<br>' +		
-							                   ' 				<br>' +		
-							                   '                <div class="jibun ellipsis" id="review_content" style="text-align:left; font-size: 15px;">'+contents[0].content+ '</div>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '                <br>' + 
-							                   '  				<div></div>' +
-							                   '  				<input type="text" id="review_content" style="width:300px; line-height=200px;" required minlength="2" maxlength="40" size="15"><span id="load_review" style="font-size:25px;"> 클릭</span>' +
-							                   '                <br>' + 
-							                   '                <br>' +  	
-							                   '        	</div>' + 
-							                   '        </div>' + 
-							                   '    </div>' +  
-							                   '</div>';
-									
-							                   
-									if(overlay!=null){
-									   overlay.setMap(null);   
-									}
+						review_content_load();
+					});
+				});
 
-							       // 마커 위에 커스텀오버레이를 표시합니다
-							       // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-							       overlay = new kakao.maps.CustomOverlay({
-							           content: content,
-							           map: map,
-							           position: coords  
-							       });
-							       
-							       
-							       coords = new kakao.maps.LatLng((parseFloat(result[0].y)+0.004).toString(), result[0].x);
-							       
-							       map.setLevel(4);
-							       map.setCenter(coords);
-							       
-							       // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-							       overlay.setMap(map);
-									$(document).on("click","#closeOverlay",function(event){
-										overlay.setMap(null);  
-									});
-									
-							               } 
-							           });  
-						 
-					});
-				});
-				
-				
-				
-				// 평점하기
-				var star_idx;
 				$(document).ready(function(){
-					$(document).on("click",".star_rating a",function(event){
-					     $(this).parent().children("a").removeClass("on");
-					     $(this).addClass("on").prevAll("a").addClass("on");
-					     star_idx=$(this).index();
-					     return false;
-					});
-				});
-				
-				// 평점올리기
-				$(document).ready(function(){
-					$(document).on("click","#star_click",function(event){
-						var form={place_name:places_place_name
-								,place_address: places_road_address
-								,score: star_idx+1
-								,count:1}
-						if(score_count!==undefined){
-							$.ajax({
-								url : "scoreUpdateImpl.mc",
-								type : "POST",
-								data : form,
-								async : false,
-								success : function(data) {
-									alertify.alert("평점등록완료!");
-								}
-							});
-						}else{
-							$.ajax({
-								url : "scoreInsertImpl.mc",
-								type : "POST",
-								data : form,
-								async : false,
-								success : function(data) {
-									alertify.alert("평점등록완료!");
-								}
-							});
-						}
-						document.getElementById('get_score').innerHTML =get_score(places_place_name,places_road_address);
-						
-					});
-				});
-				
-				
-				$(document).ready(function(){
-					$(document).on("click","#load_review",function(){
-						var date=new Date();
-						var d=(moment(date).format('YYYY MM DD HH:mm:ss')).toString();
-						var content=document.getElementById('review_content').value;
+					$(document).on("click","#upload_review",function(){
+						var d=now_Date();
+						var content=document.getElementById('review_content_input').value;
 						// int 타입 null 설정 안된다(?)
 						var form={
 							review_id:0,
@@ -838,14 +690,13 @@ https://templatemo.com/tm-528-elegance
 							async:false,
 							success:function(data){
 								alert("리뷰 전송 완료");
+								review_content_load();
 							}
 						});
 					});
 				});
 				
 				
-				
-				// 키워드로 장소 검색
 				$("#btn_map_search").click(function(){
 					if(overlay!=null){
 						   overlay.setMap(null);   
@@ -853,151 +704,6 @@ https://templatemo.com/tm-528-elegance
 					searchPlaces();
 				});
 				
-
-				$("#spin_button").click(function() {
-					startSpin();
-				});
-
-				$("#resetWheel").click(function() {
-					draw('img01');
-					resetWheel();
-				});
-
-				$("#start_check").click(function() {
-					location.href = "#slide04";
-				});
-
-				// -----------------------------------------------------------------
-				// This function is called when the segment under the prize pointer changes
-				// we can play a small tick sound here like you would expect on real prizewheels.
-				// -----------------------------------------------------------------
-				let audio = new Audio('tick.mp3'); // Create audio object and load tick.mp3 file.
-
-				function playSound() {
-					// Stop and rewind the sound if it already happens to be playing.
-					audio.pause();
-					audio.currentTime = 0;
-
-					// Play the sound.
-					audio.play();
-				}
-
-				// -------------------------------------------------------
-				// Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
-				// note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
-				// -------------------------------------------------------
-				function alertPrize(indicatedSegment) {
-					alertify.alert("당첨! " + indicatedSegment.text);
-					roullet_result = indicatedSegment;
-
-					draw(indicatedSegment.text);
-
-					document.getElementById('food_name').innerHTML = indicatedSegment.text;
-					document.getElementById('start_check').innerHTML = '검색하기';
-				}
-
-				// =======================================================================================================================
-				// Code below for the power controls etc which is entirely optional. You can spin the wheel simply by
-				// calling theWheel.startAnimation();
-				// =======================================================================================================================
-				let wheelPower = 0;
-				let wheelSpinning = false;
-
-				// -------------------------------------------------------
-				// Function to handle the onClick on the power buttons.
-				// -------------------------------------------------------
-				function powerSelected(powerLevel) {
-					// Ensure that power can't be changed while wheel is spinning.
-					if (wheelSpinning == false) {
-						// Reset all to grey incase this is not the first time the user has selected the power.
-						document.getElementById('pw1').className = "";
-						document.getElementById('pw2').className = "";
-						document.getElementById('pw3').className = "";
-
-						// Now light up all cells below-and-including the one selected by changing the class.
-						if (powerLevel >= 1) {
-							document.getElementById('pw1').className = "pw1";
-						}
-
-						if (powerLevel >= 2) {
-							document.getElementById('pw2').className = "pw2";
-						}
-
-						if (powerLevel >= 3) {
-							document.getElementById('pw3').className = "pw3";
-						}
-
-						// Set wheelPower var used when spin button is clicked.
-						wheelPower = powerLevel;
-
-						// Light up the spin button by changing it's source image and adding a clickable class to it.
-						document.getElementById('spin_button').src = "view/images/button1.jpg";
-						document.getElementById('spin_button').className = "clickable";
-					}
-				}
-
-				// -------------------------------------------------------
-				// Click handler for spin button.
-				// -------------------------------------------------------
-				function startSpin() {
-					// Ensure that spinning can't be clicked again while already running.
-					if (wheelSpinning == false) {
-						// Based on the power level selected adjust the number of spins for the wheel, the more times is has
-						// to rotate with the duration of the animation the quicker the wheel spins.
-						if (wheelPower == 1) {
-							theWheel.animation.spins = 3;
-						} else if (wheelPower == 2) {
-							theWheel.animation.spins = 8;
-						} else if (wheelPower == 3) {
-							theWheel.animation.spins = 15;
-						}
-
-						// Disable the spin button so can't click again while wheel is spinning.
-						document.getElementById('spin_button').src = "view/images/button1.jpg";
-						document.getElementById('spin_button').className = "";
-
-						// Begin the spin animation by calling startAnimation on the wheel object.
-						theWheel.startAnimation();
-
-						// Set to true so that power can't be changed and spin button re-enabled during
-						// the current animation. The user will have to reset before spinning again.
-						wheelSpinning = true;
-					}
-				}
-
-				// -------------------------------------------------------
-				// Function for reset button.
-				// -------------------------------------------------------
-				function resetWheel() {
-					theWheel.stopAnimation(false); // Stop the animation, false as param so does not call callback function.
-					theWheel.rotationAngle = 0; // Re-set the wheel angle to 0 degrees.
-					theWheel.draw(); // Call draw to render changes to the wheel.
-
-					document.getElementById('pw1').className = ""; // Remove all colours from the power level indicators.
-					document.getElementById('pw2').className = "";
-					document.getElementById('pw3').className = "";
-					document.getElementById('food_name').innerHTML="";
-					document.getElementById('start_check').innerHTML="";
-
-					wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
-				}
-
-				// Create new wheel object specifying the parameters at creation time.
-				function draw(FoodName) {
-					//이미지 객체 생성
-					var imgClo = new Image();
-					//페이지 로드후 이미지가 로드 되었을 때 이미지 출력
-					imgClo.addEventListener('load', function() {
-						//로드된 이미지를 캔버스에 출력
-						var ctx = document.getElementById('myCanvas')
-								.getContext("2d");
-						//canvas.drawImage() 함수를 사용하여 이미지 출력
-						//drawImage ( image sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-						ctx.drawImage(imgClo, 20, 30, 400, 400);
-					}, false);
-					//이미지 경로 설정
-					imgClo.src = "view/images/food/" + FoodName + ".PNG";
-				}
 			</script>
 
 
@@ -1014,5 +720,8 @@ https://templatemo.com/tm-528-elegance
 			<script src="view/js/form.js"></script>
 			<script src="view/js/custom.js"></script>
 			<script src="view/js/Winwheel.js"></script>
+			<script src="view/js/roullet.js"></script>
+			<script src="view/js/Date.js"></script>
+			<script src="view/js/Score.js"></script>
 </body>
 </html>
