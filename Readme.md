@@ -1,3 +1,11 @@
+## 2012-12-07
+### 수정사항
+
+* 오류
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.reflection.ReflectionException: Error instantiating class com.vo.Expression with invalid types () or values (). Cause: java.lang.NoSuchMethodException: com.vo.Expression.<init>()  
+기본생성자가 없을 때 발생하는 오류
+	
+
 ## 2020-12-06
 ### 수정사항
 
