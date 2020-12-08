@@ -9,6 +9,12 @@
 - 포트포워딩  
 https://m.blog.naver.com/PostView.nhn?blogId=shino1025&logNo=221328015966&proxyReferer=https:%2F%2Fwww.google.com%2F
 
+- 참고
+children text 값에 접근할 때  
+=> ().children().html()  
+reference  
+https://stackoverflow.com/questions/22048493/children-innerhtml-on-a-jquery-object-from-a-dom-node-object-returns-undefine
+
 ## 2012-12-07
 ### 수정사항
 
