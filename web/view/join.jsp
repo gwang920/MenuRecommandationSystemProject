@@ -65,7 +65,7 @@
 						<!-- <form id="ajax-contact" method="post" action="#"> -->
 						<div class="col-md-6 animate" data-animate="fadeInUp">
 							<div class="input-field">
-								<input type="text" class="form-control" name="id" id="user_id"
+								<input type="text" maxlength="20" class="form-control" name="id" id="user_id"
 									required placeholder="아이디">
 							</div>
 							<div class="input-field">

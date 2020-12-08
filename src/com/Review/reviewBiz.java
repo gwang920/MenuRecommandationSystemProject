@@ -50,4 +50,10 @@ public class reviewBiz implements ObjectBiz<String, Review> {
 		return null;
 	}
 
+	@Override
+	public void delete(String k, String k1, String k2, String k3) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

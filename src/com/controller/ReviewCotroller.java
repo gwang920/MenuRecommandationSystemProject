@@ -32,18 +32,13 @@ public class ReviewCotroller {
 	
 	@RequestMapping("/select_review.mc")
 	@ResponseBody
-	public ArrayList<Review> select_review(String place_address,int page) {
+	public ArrayList<Review> select_review(String place_address) {
 		ArrayList<Review> rs=new ArrayList<Review>();
-		ArrayList<Review> frs=new ArrayList<Review>();
 		try {
 			rs=biz.select(place_address);
-			for(int i=page*5;i<=page+6;i++) {
-				if(i>=rs.size()) break;
-				frs.add(rs.get(i));
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return frs;
+		return rs;
 	}
 }

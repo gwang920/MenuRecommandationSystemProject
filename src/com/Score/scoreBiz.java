@@ -45,4 +45,11 @@ public class scoreBiz implements ObjectBiz<String, Score> {
 	public ArrayList<Score> select(String k, String k1) {
 		return dao.select(k, k1);
 	}
+
+	@Override
+	public void delete(String k, String k1, String k2, String k3) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

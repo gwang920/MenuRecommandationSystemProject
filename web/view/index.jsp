@@ -55,15 +55,17 @@ https://templatemo.com/tm-528-elegance
 	align: center;
 
 }
+.exp_on{
+	color:#217AEF;
+	font-weight:bold;
+   
+}
 .auto_menu {
 	width:auto;
 	height: expression(this.scrollHeight > 99 ? "411px" : "auto");
 	max-height: 411px;
 	overflow-x: hidden;
 	overflow-y: auto;
-
-	
-
 }
 #dialogoverlay {
 	display: none;
@@ -139,12 +141,32 @@ https://templatemo.com/tm-528-elegance
 	color:#0080ff
 }
 
+
  input[type=text] {
  padding: 10px;
  text-align: left;
  margin: 0px;
  font-size:15px;
 }
+
+
+  .container {
+    width: 250px;
+    height: 140px;
+    overflow: auto;
+  }
+  .container::-webkit-scrollbar {
+    width: 10px;
+  }
+  .container::-webkit-scrollbar-thumb {
+    background-color: #2f3542;
+    border-radius: 10px;
+  }
+  .container::-webkit-scrollbar-track {
+    background-color: grey;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
 
 .star_rating {font-size:0; letter-spacing:-4px; color:#f5f5dc}
 .star_rating a {
@@ -572,34 +594,73 @@ https://templatemo.com/tm-528-elegance
 				
 				
 				// review contents 가져오기
-				function get_Content(page){
+				function get_Content(){
 					var contents=" ";
 					$.ajax({
 						url:"select_review.mc",
 						type:"POST",
-						data:{"place_address":places_road_address,"page":page},
+						data:{"place_address":places_road_address},
 						async:false,
 						success:function(data){
 							contents=data;
 						}
 					});
 					var content_set="";
+					var expression=get_Exp(places_road_address);
 					contents.forEach(function(item){
-						content_set+='<span class="jibun ellipsis" id="review_content" style="text-align:left; display:inline-block; width:400px; font-size: 15px; font-weight:bold;">'+item.content+'</span><span id="review_user_id" style="font-size:15px; font-weight:bold;">'+item.user_id+'</span><span style="font-size:14px;"> '+date_parse(now_Date(),item.time)+'</span><br>';
+
+						var content="";
+						if(item.content.length>29){
+							for(var i=0;i<item.content.length;i++){
+								content+=item.content[i];
+								if(i!==0 && i%29===0) content+="<br>";
+							}
+						}else{
+							content=item.content;
+						}
+						var like=0,sad=0,heart=0,smile=0,eyeheart=0;
+						var like_flag=false,sad_flag=false,heart_flag=false,smile_flag=false,eyeheart_flag=false;
+						expression.forEach(function(exp){
+							if(exp.review_id==item.review_id){
+								var flag=false;
+								if(exp.user_id===user_id) flag=true;
+								if(exp.motion==="like"){
+									if(flag) like_flag=true;
+									like++;
+								}
+								if(exp.motion==="sad"){
+									if(flag) sad_flag=true;
+									sad++;
+								}
+								if(exp.motion==="heart"){
+									if(flag) heart_flag=true;
+									heart++; 
+								}
+								if(exp.motion==="smile"){
+									if(flag) smile_flag=true;
+									smile++;
+								}
+								if(exp.motion==="eyeheart"){
+									if(flag) eyeheart_flag=true;
+									eyeheart++;
+								}
+							}
+						});
+						
+						var like_set=make_exp_set(places_road_address,item.review_id,user_id,like_flag,like,"like");
+						var sad_set=make_exp_set(places_road_address,item.review_id,user_id,sad_flag,sad,"sad");
+						var heart_set=make_exp_set(places_road_address,item.review_id,user_id,heart_flag,heart,"heart");
+						var smile_set=make_exp_set(places_road_address,item.review_id,user_id,smile_flag,smile,"smile");
+						var eyeheart_set=make_exp_set(places_road_address,item.review_id,user_id,eyeheart_flag,eyeheart,"eyeheart");
+						
+						content_set+='<span id="review_user_id" style="font-size:17px; font-weight:bold;">'+item.user_id+'</span><span style="font-size:17px;"> '+date_parse(now_Date(),item.time)+'</span><br><pre class="jibun ellipsis" id="review_content" style="text-align:left; display:inline-block; width:550px; font-size: 17px; padding-top:10px;">'+content+'</pre><br>'+like_set+sad_set+heart_set+smile_set+eyeheart_set+'<br><br>';
 		                 
 					})
-					for(var i=0;i<9-contents.length;i++){
-						content_set+='<br>';
-					}
-					
-					
-					if(contents.length===0) content_set+='<br>';
-					
-					return content_set+'<br>';
+					return content_set;
 				}
 				
 				
-				function review_content_load(page){
+				function review_content_load(){
 			    	  // 주소-좌표 변환 객체를 생성합니다
 			    	  var geocoder = new kakao.maps.services.Geocoder();
 					  // 주소로 좌표를 검색합니다
@@ -616,12 +677,11 @@ https://templatemo.com/tm-528-elegance
 						                   '        </div>' + 
 						                   '        <div class="body">' + 
 						                   '            	<div>' +
-						                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span>' + 
-						                   ' 				<br>' +		
-						                   ' 				<br>' +	get_Content(page) +	
-						                   '  				<input type="text" id="review_content_input" style="width:500px; height:17px;" required minlength="2" maxlength="40" size="15"><span id="upload_review" style="font-size:25px; font-weight:bold;"> 입력</span>' +
-						                   '                <br>' +  	
-						                   '        	</div>' + 
+						                   '                <span class="ellipsis" id="review_title" style="text-align:left; font-size: 30px;">Review</span><span><a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places_place_name+'"target="_blank"  style="font-size: 30px;" class="link">&nbsp➡네이버 검색!</a></span><br>' + 
+						                   '  				<input type="text" id="review_content_input" placeholder="내용을 입력하세요." style="width:500px; height:17px; border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px;" required minlength="2" maxlength="40" size="15" ><span id="upload_review" style="font-size:15px; font-weight:bold;"> 입력</span>' +
+						                   ' 				<div class="container" style="overflow:auto; width:550px; height:250px; ">' +	get_Content() +
+						                   '                </div>' +  	
+						                   '        		</div>' + 
 						                   '        </div>' + 
 						                   '    </div>' +  
 						                   '</div>';
@@ -659,7 +719,7 @@ https://templatemo.com/tm-528-elegance
 				// 리뷰 보기
 				$(document).ready(function(){
 					$(document).on("click","#go_to_review",function(event){
-						review_content_load(0);
+						review_content_load();
 					});
 				});
 
@@ -687,7 +747,6 @@ https://templatemo.com/tm-528-elegance
 							data: form,
 							async:false,
 							success:function(data){
-								alert("리뷰 전송 완료");
 								review_content_load();
 							}
 						});
@@ -720,6 +779,7 @@ https://templatemo.com/tm-528-elegance
 			<script src="view/js/Winwheel.js"></script>
 			<script src="view/js/roullet.js"></script>
 			<script src="view/js/Date.js"></script>
+			<script src="view/js/Expression.js"></script>
 			<script src="view/js/Score.js"></script>
 </body>
 </html>

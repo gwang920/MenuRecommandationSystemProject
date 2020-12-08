@@ -21,31 +21,31 @@ function dateToSeconds(date){
 function date_parse(now_date,pre_date){
 	var total_second=dateToSeconds(now_date)-dateToSeconds(pre_date);
 	
-	if(total_second<60) total_second+="초전";
+	if(total_second<60) total_second+="초 전";
 	else if(total_second>=60 && total_second<3600){
 	  total_second/=60;
 	  total_second=Math.floor(total_second); 
-	  total_second+="분전";
+	  total_second+="분 전";
 	} 
 	else if(total_second>=3600 && total_second<86400){
 	  total_second/=3600;
 	  total_second=Math.floor(total_second); 
-	  total_second+="시간전";
+	  total_second+="시간 전";
 	}
 	else if(total_second>=86400 && total_second<25920000){
 	  total_second/=86400;
 	  total_second=Math.floor(total_second); 
-	  total_second+="일전";  
+	  total_second+="일 전";  
 	}
 	else if(total_second>=25920000 && total_second<31104000){
 	  total_second/=25920000;
 	  total_second=Math.floor(total_second); 
-	  total_second+="달전";
+	  total_second+="달 전";
 	}
 	else{
 	  total_second/=31104000;
 	  total_second=Math.floor(total_second);
-	  total_second+="년전";
+	  total_second+="년 전";
 	}
 	return total_second;
 }

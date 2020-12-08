@@ -9,4 +9,5 @@ public interface ObjectBiz<K,V> {
 	public ArrayList<V> select(K k);
 	public ArrayList<V> select(K k,K k1);
 	public ArrayList<V> selectAll();
+	void delete(String k, String k1,String k2,String k3);
 }

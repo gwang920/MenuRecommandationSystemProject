@@ -1,4 +1,4 @@
-package com.food;
+package com.Expression;
 
 import java.util.ArrayList;
 
@@ -8,55 +8,56 @@ import org.springframework.stereotype.Component;
 
 import com.frame.ObjectBiz;
 import com.frame.ObjectDao;
-import com.vo.Food;
+import com.vo.Expression;
 
+@Component("ExpressionBiz")
+public class ExpressionBiz implements ObjectBiz<String, Expression> {
 
-@Component("FoodBiz")
-public class foodBiz implements ObjectBiz<String, Food> {
+	@Resource(name="ExpressionDao")
+	ObjectDao<String,Expression> dao;
 
-	@Resource(name="FoodDao")
-	ObjectDao<String, Food> dao;
-	
 	@Override
-	public void insert(Food v) {
-		// TODO Auto-generated method stub
+	public void insert(Expression v) {
 		dao.insert(v);
 	}
+	
+
 
 	@Override
-	public void delete(String k) {
+	public void update(Expression v) {
 		// TODO Auto-generated method stub
-		dao.delete(k);
+		
 	}
 
 	@Override
-	public void update(Food v) {
-		// TODO Auto-generated method stub
-		dao.update(v);
-	}
-
-	@Override
-	public ArrayList<Food> select(String k) {
+	public ArrayList<Expression> select(String k) {
 		// TODO Auto-generated method stub
 		return dao.select(k);
 	}
 
-	
 	@Override
-	public ArrayList<Food> selectAll() {
-		// TODO Auto-generated method stub
-		return dao.selectAll();
-	}
-
-	@Override
-	public ArrayList<Food> select(String k, String k1) {
+	public ArrayList<Expression> select(String k, String k1) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(String k, String k1, String k2, String k3) {
+	public ArrayList<Expression> selectAll() {
+		// TODO Auto-generated method stub
+		return dao.selectAll();
+	}
+
+	@Override
+	public void delete(String k) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+	@Override
+	public void delete(String k, String k1, String k2, String k3) {
+		dao.delete(k, k1, k2, k3);
+	}
+
 }

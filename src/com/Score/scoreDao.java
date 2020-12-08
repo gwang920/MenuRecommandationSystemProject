@@ -45,4 +45,10 @@ public class scoreDao implements ObjectDao<String, Score> {
 		// TODO Auto-generated method stub
 		return sm.select(k, k1);
 	}
+
+	@Override
+	public void delete(String k, String k1, String k2, String k3) {
+		// TODO Auto-generated method stub
+		
+	}
 }

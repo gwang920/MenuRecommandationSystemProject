@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.frame.ObjectDao;
 import com.mapper.reviewMapper;
 import com.vo.Review;
-
 @Component("ReviewDao")
 
 public class reviewDao implements ObjectDao<String, Review> {
@@ -48,6 +47,12 @@ public class reviewDao implements ObjectDao<String, Review> {
 	public ArrayList<Review> selectAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void delete(String k, String k1, String k2, String k3) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
