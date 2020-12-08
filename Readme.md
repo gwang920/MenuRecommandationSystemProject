@@ -1,3 +1,11 @@
+## 2012-12-08
+### 수정사항
+
+1) 댓글 표현(좋아요,슬퍼요,하트,눈하트,웃음) 기능 완료 => 사용자 클릭 (count : +1, 테두리 색상 변경 : 파랑 )
+
+- 포트포워딩  
+https://m.blog.naver.com/PostView.nhn?blogId=shino1025&logNo=221328015966&proxyReferer=https:%2F%2Fwww.google.com%2F
+
 ## 2012-12-07
 ### 수정사항
 
