@@ -16,6 +16,15 @@
 ![image](https://user-images.githubusercontent.com/49560745/101629531-d9ca8180-3a64-11eb-9787-5cfe40075abd.png)
 
 ![image](https://user-images.githubusercontent.com/49560745/102046855-861eb600-3e1f-11eb-91fa-54911180a94c.png)
+```
+1. 회원가입/로그인
+2. 메뉴 선정(선호메뉴/비선호메뉴 선택 가능)
+3. 선택된 메뉴 데이터 룰렛 적재
+4. 룰렛 돌리기(최종 메뉴 선정)
+5. 선정메뉴 + 검색(사용자가 원하는 위치) = 식당 리스트업
+6. 해당 식당 별점 및 리뷰
+```
+
 
 # IIII.개발 환경
 ![image](https://user-images.githubusercontent.com/49560745/101629583-efd84200-3a64-11eb-9793-8a3312ee1664.png)
