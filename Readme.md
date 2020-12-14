@@ -12,8 +12,10 @@
 - 댓글 기능, 별점 평점 기능, 5가지 표현 기능 구현
 ```
 
-# III.시스템 구조도
+# III.시스템 구조도 및 시나리오
 ![image](https://user-images.githubusercontent.com/49560745/101629531-d9ca8180-3a64-11eb-9787-5cfe40075abd.png)
+
+![image](https://user-images.githubusercontent.com/49560745/102046784-61c2d980-3e1f-11eb-90bf-2e29293abaab.png)
 
 # IIII.개발 환경
 ![image](https://user-images.githubusercontent.com/49560745/101629583-efd84200-3a64-11eb-9793-8a3312ee1664.png)
